@@ -26,30 +26,19 @@
 <!-- HEADER -->
 <div style="padding:80px 20px;text-align:center;">
   <h1 style="font-size:50px;">Cracker Swamp Radio</h1>
-
-  <p style="color:#ccc;">
-    Real bands streaming. No filler.
-  </p>
-
-  <p style="color:#888;">
-    All signal. No noise.
-  </p>
+  <p style="color:#ccc;">Real bands. No filler.</p>
+  <p style="color:#888;">All signal. No noise.</p>
 </div>
 
-<!-- RADIO PLACEHOLDER -->
-<div style="max-width:800px;margin:auto;padding:40px;background:#111;border-radius:8px;text-align:center;">
+<!-- PLAYER PLACEHOLDER -->
+<div style="max-width:800px;margin:auto;padding:30px;background:#111;border-radius:8px;text-align:center;">
+  <h2>Now Playing</h2>
+  <p style="color:#aaa;">Radio coming alive — real bands loading</p>
 
-  <h2 style="margin-bottom:20px;">Coming Alive Soon</h2>
+  <audio controls style="width:90%;opacity:0.5;" disabled></audio>
 
-  <p style="color:#aaa;font-size:18px;line-height:1.6;">
-    We’re building a real Southern radio experience — no algorithms, no filler.
-    <br><br>
-    Want your band in rotation?
-  </p>
-
-  <div style="margin-top:30px;">
+  <div style="margin-top:20px;">
     <a href="submit.html" style="
-      display:inline-block;
       padding:15px 30px;
       background:#cc0000;
       color:white;
@@ -60,8 +49,68 @@
       Submit Your Band
     </a>
   </div>
-
 </div>
+
+<!-- GENRE BUTTONS -->
+<div style="text-align:center;padding:40px;">
+  <button onclick="showGenre('rock')" style="margin:5px;">Rock</button>
+  <button onclick="showGenre('indie')" style="margin:5px;">Indie</button>
+  <button onclick="showGenre('punk')" style="margin:5px;">Punk</button>
+  <button onclick="showGenre('country')" style="margin:5px;">Country</button>
+</div>
+
+<!-- GENRE DISPLAY -->
+<div id="genreSection" style="max-width:800px;margin:auto;padding:20px;"></div>
+
+<script>
+const genres = {
+  rock: [
+    "Band 1 – Rock",
+    "Band 2 – Rock",
+    "Band 3 – Rock",
+    "Band 4 – Rock",
+    "Band 5 – Rock"
+  ],
+  indie: [
+    "Band 1 – Indie",
+    "Band 2 – Indie",
+    "Band 3 – Indie",
+    "Band 4 – Indie",
+    "Band 5 – Indie"
+  ],
+  punk: [
+    "Band 1 – Punk",
+    "Band 2 – Punk",
+    "Band 3 – Punk",
+    "Band 4 – Punk",
+    "Band 5 – Punk"
+  ],
+  country: [
+    "Band 1 – Country",
+    "Band 2 – Country",
+    "Band 3 – Country",
+    "Band 4 – Country",
+    "Band 5 – Country"
+  ]
+};
+
+function showGenre(genre) {
+  const section = document.getElementById("genreSection");
+
+  section.innerHTML = `<h2 style="text-align:center;">Top ${genre.toUpperCase()} Bands</h2>`;
+
+  genres[genre].forEach(band => {
+    const div = document.createElement("div");
+    div.style.background = "#111";
+    div.style.padding = "15px";
+    div.style.margin = "10px 0";
+    div.style.borderRadius = "5px";
+
+    div.innerText = band;
+    section.appendChild(div);
+  });
+}
+</script>
 
 </body>
 </html>

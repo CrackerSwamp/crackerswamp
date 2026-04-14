@@ -6,59 +6,45 @@
 
 <body style="background:#0b0b0b;color:white;font-family:Arial;margin:0;">
 
-<!-- NAV -->
 <div style="background:#0b0b0b;border-bottom:1px solid #222;padding:15px;text-align:center;">
+  <span style="font-size:20px;font-weight:bold;margin-right:20px;">Cracker Swamp</span>
+  <a href="index.html">Home</a>
+  <a href="georgia.html">Georgia</a>
+  <a href="alabama.html">Alabama</a>
+  <a href="florida.html">Florida</a>
+  <a href="southcarolina.html">South Carolina</a>
+  <a href="louisiana.html">Louisiana</a>
+  <a href="mississippi.html">Mississippi</a>
+  <a href="radio.html">Radio</a>
+  <a href="about.html">About</a>
 
-  <span style="font-size:20px;font-weight:bold;margin-right:20px;">
-    Cracker Swamp
-  </span>
-
-  <a href="index.html" style="color:white;margin:0 10px;text-decoration:none;">Home</a>
-  <a href="georgia.html" style="color:white;margin:0 10px;text-decoration:none;">Georgia</a>
-  <a href="alabama.html" style="color:white;margin:0 10px;text-decoration:none;">Alabama</a>
-  <a href="florida.html" style="color:white;margin:0 10px;text-decoration:none;">Florida</a>
-  <a href="southcarolina.html" style="color:white;margin:0 10px;text-decoration:none;">South Carolina</a>
-  <a href="louisiana.html" style="color:white;margin:0 10px;text-decoration:none;">Louisiana</a>
-  <a href="mississippi.html" style="color:white;margin:0 10px;text-decoration:none;">Mississippi</a>
-  <a href="radio.html" style="color:white;margin:0 10px;text-decoration:none;">Radio</a>
-  <a href="about.html" style="color:white;margin:0 10px;text-decoration:none;">About</a>
-
-  <a href="submit.html" style="
-    margin-left:15px;
-    padding:8px 15px;
-    background:#cc0000;
-    border-radius:5px;
-    color:white;
-    text-decoration:none;
-  ">
+  <a href="submit.html" style="margin-left:15px;padding:8px 15px;background:#cc0000;border-radius:5px;color:white;">
     Submit
   </a>
-
 </div>
 
-<!-- HEADER -->
-<div style="padding:80px 20px;text-align:center;">
-  <h1 style="font-size:50px;margin-bottom:10px;">Submit Your Band</h1>
-  <p style="color:#ccc;">Real bands. Real sound. No industry BS.</p>
+<div style="padding:80px;text-align:center;">
+  <h1 style="font-size:50px;">Submit Your Band</h1>
   <p style="color:#888;">All signal. No noise.</p>
-</div>
 
-<!-- FORM -->
-<div style="max-width:600px;margin:auto;padding:40px;background:#111;border-radius:8px;text-align:center;">
+  <form action="https://formspree.io/f/xbdqrwon" method="POST" style="margin-top:30px;" enctype="multipart/form-data">
 
-  <form action="https://formspree.io/f/xbdqrwon" method="POST">
+    <input type="text" name="band" placeholder="Band Name" required style="padding:10px;margin:10px;"><br>
 
-    <input type="text" name="band" placeholder="Band Name" required
-      style="width:90%;padding:12px;margin:10px;border:none;border-radius:5px;">
+    <input type="text" name="location" placeholder="Location" required style="padding:10px;margin:10px;"><br>
 
-    <input type="text" name="location" placeholder="Location" required
-      style="width:90%;padding:12px;margin:10px;border:none;border-radius:5px;">
+    <input type="text" name="genre" placeholder="Genre" required style="padding:10px;margin:10px;"><br>
 
-    <input type="url" name="music" placeholder="Link to Music" required
-      style="width:90%;padding:12px;margin:10px;border:none;border-radius:5px;">
+    <textarea name="bio" placeholder="Short Bio" required style="padding:10px;margin:10px;width:250px;height:100px;"></textarea><br>
 
-    <button type="submit"
-      style="padding:15px 30px;background:#cc0000;color:white;border:none;border-radius:5px;font-size:16px;margin-top:15px;">
+    <input type="url" name="music" placeholder="Link to Music (Spotify, Bandcamp, etc.)" required style="padding:10px;margin:10px;"><br>
+
+    <label style="display:block;margin-top:10px;color:#ccc;">
+      Upload Image / Logo (gives permission to use)
+    </label>
+    <input type="file" name="image" accept="image/*" style="margin:10px;"><br>
+
+    <button type="submit" style="padding:15px 30px;background:#cc0000;color:white;border:none;border-radius:5px;">
       Submit
     </button>
 

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>South Carolina Music Scene - Cracker Swamp</title>
+</head>
+
+<body style="background:#0b0b0b;color:white;font-family:Arial;margin:0;">
+
+<div style="background:#111;padding:10px;text-align:center;">
+  <a href="index.html" style="color:white;margin:0 10px;">Home</a>
+  <a href="georgia.html" style="color:white;margin:0 10px;">Georgia</a>
+  <a href="alabama.html" style="color:white;margin:0 10px;">Alabama</a>
+  <a href="florida.html" style="color:white;margin:0 10px;">Florida</a>
+  <a href="submit.html" style="color:red;margin:0 10px;">Submit</a>
+</div>
+
+<div style="padding:80px 20px;text-align:center;">
+  <h1>South Carolina Music Scene</h1>
+  <p style="color:#ccc;">All signal. No noise.</p>
+</div>
+
+<div style="padding:40px;max-width:900px;margin:auto;">
+
+  <div style="margin-top:30px;background:#111;padding:20px;border-radius:8px;display:flex;gap:20px;">
+    <img src="https://via.placeholder.com/100">
+    <div>
+      <h3>Band of Horses</h3>
+      <p style="color:#aaa;">Charleston, SC</p>
+      <p>Atmospheric indie rock with southern depth.</p>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

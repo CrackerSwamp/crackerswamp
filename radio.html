@@ -32,12 +32,16 @@
 
 <!-- PLAYER -->
 <div style="max-width:800px;margin:auto;padding:30px;background:#111;border-radius:8px;text-align:center;">
-
   <h2>Now Playing</h2>
   <p id="trackName" style="color:#aaa;">Loading...</p>
 
   <audio id="audioPlayer" controls style="width:90%;"></audio>
 
+  <br>
+
+  <button onclick="toggleShuffle()" style="margin-top:10px;padding:8px 15px;">
+    Shuffle: Off
+  </button>
 </div>
 
 <!-- PLAYLIST -->
@@ -47,103 +51,118 @@
 </div>
 
 <script>
-  const defaultTracks = [
-    {
-      name: "Reptar – Athens, GA",
-      src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-      img: "https://via.placeholder.com/40"
-    },
-    {
-      name: "Tedo Stone – Atlanta, GA",
-      src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-      img: "https://via.placeholder.com/40"
-    },
-    {
-      name: "Black Lips – Atlanta, GA",
-      src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
-      img: "https://via.placeholder.com/40"
-    }
-  ];
+const defaultTracks = [
+  {
+    name: "Replace Me – Real Band",
+    src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    img: "https://via.placeholder.com/40"
+  },
+  {
+    name: "Add Your Bands Here",
+    src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+    img: "https://via.placeholder.com/40"
+  },
+  {
+    name: "This Is Your Radio",
+    src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+    img: "https://via.placeholder.com/40"
+  }
+];
 
-  let tracks = JSON.parse(localStorage.getItem("playlist")) || defaultTracks;
-  let currentTrack = parseInt(localStorage.getItem("currentTrack")) || 0;
+let tracks = JSON.parse(localStorage.getItem("playlist")) || defaultTracks;
+let currentTrack = parseInt(localStorage.getItem("currentTrack")) || 0;
+let shuffle = false;
+let draggedIndex = null;
 
-  const audioPlayer = document.getElementById("audioPlayer");
-  const trackName = document.getElementById("trackName");
-  const playlistDiv = document.getElementById("playlist");
+const audioPlayer = document.getElementById("audioPlayer");
+const trackName = document.getElementById("trackName");
+const playlistDiv = document.getElementById("playlist");
 
-  function renderPlaylist() {
-    playlistDiv.innerHTML = "";
+// RENDER PLAYLIST
+function renderPlaylist() {
+  playlistDiv.innerHTML = "";
 
-    tracks.forEach((track, index) => {
-      const item = document.createElement("div");
+  tracks.forEach((track, index) => {
+    const item = document.createElement("div");
 
-      item.draggable = true;
-      item.dataset.index = index;
+    item.draggable = true;
+    item.dataset.index = index;
 
-      item.style.display = "flex";
-      item.style.alignItems = "center";
-      item.style.margin = "10px 0";
-      item.style.cursor = "grab";
+    item.style.display = "flex";
+    item.style.alignItems = "center";
+    item.style.margin = "10px 0";
+    item.style.cursor = "grab";
 
-      item.innerHTML = `
-        <img src="${track.img}" style="width:40px;height:40px;border-radius:5px;margin-right:10px;">
-        <span>${track.name}</span>
-      `;
+    item.innerHTML = `
+      <img src="${track.img}" style="width:40px;height:40px;border-radius:5px;margin-right:10px;">
+      <span>${track.name}</span>
+    `;
 
-      item.onclick = () => playTrack(index);
+    item.onclick = () => playTrack(index);
 
-      item.addEventListener("dragstart", dragStart);
-      item.addEventListener("dragover", dragOver);
-      item.addEventListener("drop", drop);
-
-      playlistDiv.appendChild(item);
+    item.addEventListener("dragstart", (e) => draggedIndex = index);
+    item.addEventListener("dragover", (e) => e.preventDefault());
+    item.addEventListener("drop", (e) => {
+      const targetIndex = index;
+      const moved = tracks.splice(draggedIndex, 1)[0];
+      tracks.splice(targetIndex, 0, moved);
+      savePlaylist();
+      renderPlaylist();
     });
-  }
 
-  let draggedIndex = null;
-
-  function dragStart(e) {
-    draggedIndex = e.target.dataset.index;
-  }
-
-  function dragOver(e) {
-    e.preventDefault();
-  }
-
-  function drop(e) {
-    let targetIndex = e.target.closest("div").dataset.index;
-
-    const moved = tracks.splice(draggedIndex, 1)[0];
-    tracks.splice(targetIndex, 0, moved);
-
-    savePlaylist();
-    renderPlaylist();
-  }
-
-  function playTrack(index) {
-    currentTrack = index;
-    localStorage.setItem("currentTrack", currentTrack);
-
-    audioPlayer.src = tracks[index].src;
-    trackName.innerText = tracks[index].name;
-
-    audioPlayer.play().catch(() => {});
-  }
-
-  function savePlaylist() {
-    localStorage.setItem("playlist", JSON.stringify(tracks));
-  }
-
-  // AUTO CONTINUOUS RADIO
-  audioPlayer.addEventListener("ended", () => {
-    currentTrack = (currentTrack + 1) % tracks.length;
-    playTrack(currentTrack);
+    playlistDiv.appendChild(item);
   });
+}
 
-  // INITIAL LOAD
-  renderPlaylist();
+// PLAY TRACK
+function playTrack(index) {
+  currentTrack = index;
+
+  localStorage.setItem("currentTrack", currentTrack);
+  localStorage.setItem("currentTime", 0);
+
+  audioPlayer.src = tracks[index].src;
+  trackName.innerText = tracks[index].name;
+
+  audioPlayer.play().catch(() => {});
+}
+
+// SAVE PLAYLIST
+function savePlaylist() {
+  localStorage.setItem("playlist", JSON.stringify(tracks));
+}
+
+// SHUFFLE
+function toggleShuffle() {
+  shuffle = !shuffle;
+  document.querySelector("button").innerText = "Shuffle: " + (shuffle ? "On" : "Off");
+}
+
+// CONTINUOUS RADIO
+audioPlayer.addEventListener("ended", () => {
+  if (shuffle) {
+    currentTrack = Math.floor(Math.random() * tracks.length);
+  } else {
+    currentTrack = (currentTrack + 1) % tracks.length;
+  }
   playTrack(currentTrack);
+});
+
+// SAVE POSITION
+audioPlayer.addEventListener("timeupdate", () => {
+  localStorage.setItem("currentTime", audioPlayer.currentTime);
+});
+
+// RESTORE POSITION
+const savedTime = parseFloat(localStorage.getItem("currentTime")) || 0;
+
+audioPlayer.addEventListener("loadedmetadata", () => {
+  audioPlayer.currentTime = savedTime;
+});
+
+// INIT
+renderPlaylist();
+playTrack(currentTrack);
 </script>
 
 </body>

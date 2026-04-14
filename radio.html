@@ -8,97 +8,94 @@
 
 <!-- NAV -->
 <div style="background:#0b0b0b;border-bottom:1px solid #222;padding:12px;text-align:center;">
-
-  <div style="font-size:20px;font-weight:bold;margin-bottom:10px;">
-    Cracker Swamp
-  </div>
+  <div style="font-size:20px;font-weight:bold;margin-bottom:10px;">Cracker Swamp</div>
 
   <div style="line-height:2;">
-    <a href="index.html" style="color:white;margin:0 10px;text-decoration:none;">Home</a>
-    <a href="scenes.html" style="color:white;margin:0 10px;text-decoration:none;">Scenes</a>
-    <a href="bands.html" style="color:white;margin:0 10px;text-decoration:none;">Bands</a>
-    <a href="radio.html" style="color:white;margin:0 10px;text-decoration:none;">Radio</a>
-    <a href="store.html" style="color:white;margin:0 10px;text-decoration:none;">Store</a>
+    <a href="index.html" style="color:white;margin:0 10px;">Home</a>
+    <a href="scenes.html" style="color:white;margin:0 10px;">Scenes</a>
+    <a href="bands.html" style="color:white;margin:0 10px;">Bands</a>
+    <a href="radio.html" style="color:white;margin:0 10px;">Radio</a>
+    <a href="store.html" style="color:white;margin:0 10px;">Store</a>
 
-    <a href="submit.html" style="
-      display:inline-block;
-      margin-left:10px;
-      padding:6px 12px;
-      background:#cc0000;
-      border-radius:5px;
-      color:white;
-      text-decoration:none;
-    ">
+    <a href="submit.html" style="padding:6px 12px;background:#cc0000;border-radius:5px;color:white;margin-left:10px;">
       Submit
     </a>
   </div>
-
 </div>
 
 <!-- HEADER -->
 <div style="padding:80px 20px;text-align:center;">
-  <h1 style="font-size:50px;margin-bottom:10px;">Cracker Swamp Radio</h1>
-
-  <p style="color:#ccc;">
-    Real bands streaming. No filler.
-  </p>
-
-  <p style="color:#888;">
-    All signal. No noise.
-  </p>
+  <h1 style="font-size:50px;">Cracker Swamp Radio</h1>
+  <p style="color:#ccc;">Real bands streaming. No filler.</p>
+  <p style="color:#888;">All signal. No noise.</p>
 </div>
 
 <!-- PLAYER -->
 <div style="max-width:800px;margin:auto;padding:30px;background:#111;border-radius:8px;text-align:center;">
 
   <h2>Now Playing</h2>
-  <p id="trackName" style="color:#aaa;">Reptar – Athens, GA</p>
+  <p id="trackName" style="color:#aaa;">Loading...</p>
 
-  <audio id="audioPlayer" controls style="width:90%;">
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-  </audio>
-
-  <div style="margin-top:20px;">
-    <button onclick="prevTrack()" style="padding:10px 20px;margin:5px;">Previous</button>
-    <button onclick="nextTrack()" style="padding:10px 20px;margin:5px;">Next</button>
-  </div>
+  <audio id="audioPlayer" controls style="width:90%;"></audio>
 
 </div>
 
 <!-- PLAYLIST -->
 <div style="max-width:800px;margin:auto;padding:40px;">
 
-  <h2>Playlist</h2>
+  <h2>Your Playlist</h2>
 
-  <ul id="playlist" style="list-style:none;padding:0;color:#ccc;">
-    <li onclick="playTrack(0)" style="cursor:pointer;margin:10px 0;">Reptar – Athens, GA</li>
-    <li onclick="playTrack(1)" style="cursor:pointer;margin:10px 0;">Tedo Stone – Atlanta, GA</li>
-    <li onclick="playTrack(2)" style="cursor:pointer;margin:10px 0;">Black Lips – Atlanta, GA</li>
-  </ul>
+  <div id="playlist"></div>
 
 </div>
 
-<!-- SCRIPT -->
 <script>
-  const tracks = [
+  const defaultTracks = [
     {
       name: "Reptar – Athens, GA",
-      src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+      src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+      img: "https://via.placeholder.com/40"
     },
     {
       name: "Tedo Stone – Atlanta, GA",
-      src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
+      src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+      img: "https://via.placeholder.com/40"
     },
     {
       name: "Black Lips – Atlanta, GA",
-      src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
+      src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+      img: "https://via.placeholder.com/40"
     }
   ];
 
+  let tracks = JSON.parse(localStorage.getItem("playlist")) || defaultTracks;
   let currentTrack = 0;
 
   const audioPlayer = document.getElementById("audioPlayer");
   const trackName = document.getElementById("trackName");
+  const playlistDiv = document.getElementById("playlist");
+
+  function renderPlaylist() {
+    playlistDiv.innerHTML = "";
+
+    tracks.forEach((track, index) => {
+      const item = document.createElement("div");
+
+      item.style.display = "flex";
+      item.style.alignItems = "center";
+      item.style.margin = "10px 0";
+      item.style.cursor = "pointer";
+
+      item.innerHTML = `
+        <img src="${track.img}" style="width:40px;height:40px;border-radius:5px;margin-right:10px;">
+        <span>${track.name}</span>
+      `;
+
+      item.onclick = () => playTrack(index);
+
+      playlistDiv.appendChild(item);
+    });
+  }
 
   function playTrack(index) {
     currentTrack = index;
@@ -107,15 +104,19 @@
     audioPlayer.play();
   }
 
-  function nextTrack() {
-    currentTrack = (currentTrack + 1) % tracks.length;
-    playTrack(currentTrack);
+  function savePlaylist() {
+    localStorage.setItem("playlist", JSON.stringify(tracks));
   }
 
-  function prevTrack() {
-    currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+  // AUTO PLAY NEXT TRACK
+  audioPlayer.addEventListener("ended", () => {
+    currentTrack = (currentTrack + 1) % tracks.length;
     playTrack(currentTrack);
-  }
+  });
+
+  // INITIAL LOAD
+  renderPlaylist();
+  playTrack(0);
 </script>
 
 </body>

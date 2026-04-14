@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mississippi Music Scene - Cracker Swamp</title>
+</head>
+
+<body style="background:#0b0b0b;color:white;font-family:Arial;margin:0;">
+
+<div style="background:#111;padding:10px;text-align:center;">
+  <a href="index.html">Home</a>
+  <a href="submit.html" style="color:red;">Submit</a>
+</div>
+
+<div style="padding:80px 20px;text-align:center;">
+  <h1>Mississippi Music Scene</h1>
+  <p style="color:#ccc;">All signal. No noise.</p>
+</div>
+
+<div style="padding:40px;max-width:900px;margin:auto;">
+
+  <div style="background:#111;padding:20px;border-radius:8px;">
+    <h3>Bass Drum of Death</h3>
+    <p style="color:#aaa;">Oxford, MS</p>
+    <p>Raw garage rock with heavy riffs and southern grit.</p>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -17,7 +17,14 @@
     <a href="radio.html" style="color:white;margin:0 10px;">Radio</a>
     <a href="store.html" style="color:white;margin:0 10px;">Store</a>
 
-    <a href="submit.html" style="padding:6px 12px;background:#cc0000;border-radius:5px;color:white;margin-left:10px;">
+    <a href="submit.html" style="
+      padding:6px 12px;
+      background:#cc0000;
+      border-radius:5px;
+      color:white;
+      margin-left:10px;
+      text-decoration:none;
+    ">
       Submit
     </a>
   </div>
@@ -33,7 +40,10 @@
 <!-- PLAYER PLACEHOLDER -->
 <div style="max-width:800px;margin:auto;padding:30px;background:#111;border-radius:8px;text-align:center;">
   <h2>Now Playing</h2>
-  <p style="color:#aaa;">Radio coming alive — real bands loading</p>
+
+  <p style="color:#aaa;">
+    Radio coming alive — real bands loading
+  </p>
 
   <audio controls style="width:90%;opacity:0.5;" disabled></audio>
 
@@ -56,7 +66,16 @@
   <button onclick="showGenre('rock')" style="margin:5px;">Rock</button>
   <button onclick="showGenre('indie')" style="margin:5px;">Indie</button>
   <button onclick="showGenre('punk')" style="margin:5px;">Punk</button>
+  <button onclick="showGenre('southernrock')" style="margin:5px;">Southern Rock</button>
+  <button onclick="showGenre('blues')" style="margin:5px;">Blues</button>
   <button onclick="showGenre('country')" style="margin:5px;">Country</button>
+  <button onclick="showGenre('altcountry')" style="margin:5px;">Alt Country</button>
+  <button onclick="showGenre('psychedelic')" style="margin:5px;">Psychedelic</button>
+  <button onclick="showGenre('funk')" style="margin:5px;">Funk</button>
+  <button onclick="showGenre('rnb')" style="margin:5px;">R&amp;B</button>
+  <button onclick="showGenre('soul')" style="margin:5px;">Soul</button>
+  <button onclick="showGenre('garage')" style="margin:5px;">Garage</button>
+  <button onclick="showGenre('hiphop')" style="margin:5px;">Hip-Hop</button>
 </div>
 
 <!-- GENRE DISPLAY -->
@@ -64,34 +83,60 @@
 
 <script>
 const genres = {
+
   rock: [
-    "Band 1 – Rock",
-    "Band 2 – Rock",
-    "Band 3 – Rock",
-    "Band 4 – Rock",
-    "Band 5 – Rock"
+    { name: "Band 1 – Rock", link: "bands.html#band1" },
+    { name: "Band 2 – Rock", link: "bands.html#band2" }
   ],
+
   indie: [
-    "Band 1 – Indie",
-    "Band 2 – Indie",
-    "Band 3 – Indie",
-    "Band 4 – Indie",
-    "Band 5 – Indie"
+    { name: "Band 3 – Indie", link: "bands.html#band3" }
   ],
+
   punk: [
-    "Band 1 – Punk",
-    "Band 2 – Punk",
-    "Band 3 – Punk",
-    "Band 4 – Punk",
-    "Band 5 – Punk"
+    { name: "Band 4 – Punk", link: "bands.html#band4" }
   ],
+
+  southernrock: [
+    { name: "Band 5 – Southern Rock", link: "bands.html#band5" }
+  ],
+
+  blues: [
+    { name: "Band 6 – Blues", link: "bands.html#band6" }
+  ],
+
   country: [
-    "Band 1 – Country",
-    "Band 2 – Country",
-    "Band 3 – Country",
-    "Band 4 – Country",
-    "Band 5 – Country"
+    { name: "Band 7 – Country", link: "bands.html#band7" }
+  ],
+
+  altcountry: [
+    { name: "Band 8 – Alt Country", link: "bands.html#band8" }
+  ],
+
+  psychedelic: [
+    { name: "Band 9 – Psychedelic", link: "bands.html#band9" }
+  ],
+
+  funk: [
+    { name: "Band 10 – Funk", link: "bands.html#band10" }
+  ],
+
+  rnb: [
+    { name: "Band 11 – R&B", link: "bands.html#band11" }
+  ],
+
+  soul: [
+    { name: "Band 12 – Soul", link: "bands.html#band12" }
+  ],
+
+  garage: [
+    { name: "Band 13 – Garage", link: "bands.html#band13" }
+  ],
+
+  hiphop: [
+    { name: "Band 14 – Hip-Hop", link: "bands.html#band14" }
   ]
+
 };
 
 function showGenre(genre) {
@@ -101,12 +146,18 @@ function showGenre(genre) {
 
   genres[genre].forEach(band => {
     const div = document.createElement("div");
+
     div.style.background = "#111";
     div.style.padding = "15px";
     div.style.margin = "10px 0";
     div.style.borderRadius = "5px";
 
-    div.innerText = band;
+    div.innerHTML = `
+      <a href="${band.link}" style="color:white;text-decoration:none;">
+        ${band.name}
+      </a>
+    `;
+
     section.appendChild(div);
   });
 }

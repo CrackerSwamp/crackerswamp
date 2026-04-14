@@ -42,11 +42,8 @@
 
 <!-- PLAYLIST -->
 <div style="max-width:800px;margin:auto;padding:40px;">
-
-  <h2>Your Playlist</h2>
-
+  <h2>Your Playlist (drag to reorder)</h2>
   <div id="playlist"></div>
-
 </div>
 
 <script>
@@ -69,7 +66,7 @@
   ];
 
   let tracks = JSON.parse(localStorage.getItem("playlist")) || defaultTracks;
-  let currentTrack = 0;
+  let currentTrack = parseInt(localStorage.getItem("currentTrack")) || 0;
 
   const audioPlayer = document.getElementById("audioPlayer");
   const trackName = document.getElementById("trackName");
@@ -81,10 +78,13 @@
     tracks.forEach((track, index) => {
       const item = document.createElement("div");
 
+      item.draggable = true;
+      item.dataset.index = index;
+
       item.style.display = "flex";
       item.style.alignItems = "center";
       item.style.margin = "10px 0";
-      item.style.cursor = "pointer";
+      item.style.cursor = "grab";
 
       item.innerHTML = `
         <img src="${track.img}" style="width:40px;height:40px;border-radius:5px;margin-right:10px;">
@@ -93,22 +93,49 @@
 
       item.onclick = () => playTrack(index);
 
+      item.addEventListener("dragstart", dragStart);
+      item.addEventListener("dragover", dragOver);
+      item.addEventListener("drop", drop);
+
       playlistDiv.appendChild(item);
     });
   }
 
+  let draggedIndex = null;
+
+  function dragStart(e) {
+    draggedIndex = e.target.dataset.index;
+  }
+
+  function dragOver(e) {
+    e.preventDefault();
+  }
+
+  function drop(e) {
+    let targetIndex = e.target.closest("div").dataset.index;
+
+    const moved = tracks.splice(draggedIndex, 1)[0];
+    tracks.splice(targetIndex, 0, moved);
+
+    savePlaylist();
+    renderPlaylist();
+  }
+
   function playTrack(index) {
     currentTrack = index;
+    localStorage.setItem("currentTrack", currentTrack);
+
     audioPlayer.src = tracks[index].src;
     trackName.innerText = tracks[index].name;
-    audioPlayer.play();
+
+    audioPlayer.play().catch(() => {});
   }
 
   function savePlaylist() {
     localStorage.setItem("playlist", JSON.stringify(tracks));
   }
 
-  // AUTO PLAY NEXT TRACK
+  // AUTO CONTINUOUS RADIO
   audioPlayer.addEventListener("ended", () => {
     currentTrack = (currentTrack + 1) % tracks.length;
     playTrack(currentTrack);
@@ -116,7 +143,7 @@
 
   // INITIAL LOAD
   renderPlaylist();
-  playTrack(0);
+  playTrack(currentTrack);
 </script>
 
 </body>

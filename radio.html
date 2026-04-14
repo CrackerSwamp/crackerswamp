@@ -1,48 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>About - Cracker Swamp</title>
-  <meta name="google-site-verification" content="vr2bPFAeTgjeJpQIdlmKNCM47iAxoTUe__xtcn6wUb0" />
+  <title>Radio - Cracker Swamp</title>
 </head>
 
 <body style="background:#0b0b0b;color:white;font-family:Arial;margin:0;">
 
-<!-- NAV (FIXED + MATCHING SITE) -->
-<div style="background:#0b0b0b;border-bottom:1px solid #222;padding:15px;text-align:center;">
+<!-- NAV -->
+<div style="background:#0b0b0b;border-bottom:1px solid #222;padding:12px;text-align:center;">
 
-  <span style="font-size:20px;font-weight:bold;margin-right:20px;">
+  <div style="font-size:20px;font-weight:bold;margin-bottom:10px;">
     Cracker Swamp
-  </span>
+  </div>
 
-  <a href="index.html" style="color:white;margin:0 10px;text-decoration:none;">Home</a>
-  <a href="georgia.html" style="color:white;margin:0 10px;text-decoration:none;">Georgia</a>
-  <a href="alabama.html" style="color:white;margin:0 10px;text-decoration:none;">Alabama</a>
-  <a href="florida.html" style="color:white;margin:0 10px;text-decoration:none;">Florida</a>
-  <a href="southcarolina.html" style="color:white;margin:0 10px;text-decoration:none;">South Carolina</a>
-  <a href="louisiana.html" style="color:white;margin:0 10px;text-decoration:none;">Louisiana</a>
-  <a href="mississippi.html" style="color:white;margin:0 10px;text-decoration:none;">Mississippi</a>
-  <a href="radio.html" style="color:white;margin:0 10px;text-decoration:none;">Radio</a>
-  <a href="about.html" style="color:white;margin:0 10px;text-decoration:none;">About</a>
+  <div style="line-height:2;">
+    <a href="index.html" style="color:white;margin:0 10px;text-decoration:none;">Home</a>
+    <a href="scenes.html" style="color:white;margin:0 10px;text-decoration:none;">Scenes</a>
+    <a href="bands.html" style="color:white;margin:0 10px;text-decoration:none;">Bands</a>
+    <a href="radio.html" style="color:white;margin:0 10px;text-decoration:none;">Radio</a>
+    <a href="store.html" style="color:white;margin:0 10px;text-decoration:none;">Store</a>
 
-  <a href="submit.html" style="
-    margin-left:15px;
-    padding:8px 15px;
-    background:#cc0000;
-    border-radius:5px;
-    color:white;
-    text-decoration:none;
-  ">
-    Submit
-  </a>
+    <a href="submit.html" style="
+      display:inline-block;
+      margin-left:10px;
+      padding:6px 12px;
+      background:#cc0000;
+      border-radius:5px;
+      color:white;
+      text-decoration:none;
+    ">
+      Submit
+    </a>
+  </div>
 
 </div>
 
 <!-- HEADER -->
 <div style="padding:80px 20px;text-align:center;">
-  <h1 style="font-size:50px;margin-bottom:10px;">About Cracker Swamp</h1>
+  <h1 style="font-size:50px;margin-bottom:10px;">Cracker Swamp Radio</h1>
 
-  <p style="font-size:20px;color:#ccc;">
-    Real bands. Real sound. No industry BS.
+  <p style="color:#ccc;">
+    Real bands streaming. No filler.
   </p>
 
   <p style="color:#888;">
@@ -50,39 +48,75 @@
   </p>
 </div>
 
-<!-- CONTENT -->
-<div style="max-width:800px;margin:auto;padding:40px;line-height:1.6;">
+<!-- PLAYER -->
+<div style="max-width:800px;margin:auto;padding:30px;background:#111;border-radius:8px;text-align:center;">
 
-  <p style="color:#aaa;font-size:18px;">
-    Cracker Swamp is a curated music platform focused on real bands across the South.
-    We highlight artists who bring something genuine — no industry hype, no filler, no shortcuts.
-  </p>
+  <h2>Now Playing</h2>
+  <p id="trackName" style="color:#aaa;">Reptar – Athens, GA</p>
 
-  <p style="color:#aaa;font-size:18px;">
-    The goal is simple: connect listeners with music that actually matters.
-    Every band featured here is part of a growing network of independent artists building something real.
-  </p>
+  <audio id="audioPlayer" controls style="width:90%;">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
 
-  <p style="color:#aaa;font-size:18px;">
-    This platform isn’t about trends or algorithms.
-    It’s about sound, identity, and staying true to what music is supposed to be.
-  </p>
-
-  <div style="margin-top:40px;text-align:center;">
-    <a href="submit.html" style="
-      display:inline-block;
-      padding:15px 30px;
-      background:#cc0000;
-      color:white;
-      text-decoration:none;
-      border-radius:5px;
-      font-size:18px;
-    ">
-      Submit Your Band
-    </a>
+  <div style="margin-top:20px;">
+    <button onclick="prevTrack()" style="padding:10px 20px;margin:5px;">Previous</button>
+    <button onclick="nextTrack()" style="padding:10px 20px;margin:5px;">Next</button>
   </div>
 
 </div>
+
+<!-- PLAYLIST -->
+<div style="max-width:800px;margin:auto;padding:40px;">
+
+  <h2>Playlist</h2>
+
+  <ul id="playlist" style="list-style:none;padding:0;color:#ccc;">
+    <li onclick="playTrack(0)" style="cursor:pointer;margin:10px 0;">Reptar – Athens, GA</li>
+    <li onclick="playTrack(1)" style="cursor:pointer;margin:10px 0;">Tedo Stone – Atlanta, GA</li>
+    <li onclick="playTrack(2)" style="cursor:pointer;margin:10px 0;">Black Lips – Atlanta, GA</li>
+  </ul>
+
+</div>
+
+<!-- SCRIPT -->
+<script>
+  const tracks = [
+    {
+      name: "Reptar – Athens, GA",
+      src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+    },
+    {
+      name: "Tedo Stone – Atlanta, GA",
+      src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
+    },
+    {
+      name: "Black Lips – Atlanta, GA",
+      src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
+    }
+  ];
+
+  let currentTrack = 0;
+
+  const audioPlayer = document.getElementById("audioPlayer");
+  const trackName = document.getElementById("trackName");
+
+  function playTrack(index) {
+    currentTrack = index;
+    audioPlayer.src = tracks[index].src;
+    trackName.innerText = tracks[index].name;
+    audioPlayer.play();
+  }
+
+  function nextTrack() {
+    currentTrack = (currentTrack + 1) % tracks.length;
+    playTrack(currentTrack);
+  }
+
+  function prevTrack() {
+    currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+    playTrack(currentTrack);
+  }
+</script>
 
 </body>
 </html>

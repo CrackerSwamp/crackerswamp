@@ -26,144 +26,42 @@
 <!-- HEADER -->
 <div style="padding:80px 20px;text-align:center;">
   <h1 style="font-size:50px;">Cracker Swamp Radio</h1>
-  <p style="color:#ccc;">Real bands streaming. No filler.</p>
-  <p style="color:#888;">All signal. No noise.</p>
+
+  <p style="color:#ccc;">
+    Real bands streaming. No filler.
+  </p>
+
+  <p style="color:#888;">
+    All signal. No noise.
+  </p>
 </div>
 
-<!-- PLAYER -->
-<div style="max-width:800px;margin:auto;padding:30px;background:#111;border-radius:8px;text-align:center;">
-  <h2>Now Playing</h2>
-  <p id="trackName" style="color:#aaa;">Loading...</p>
+<!-- RADIO PLACEHOLDER -->
+<div style="max-width:800px;margin:auto;padding:40px;background:#111;border-radius:8px;text-align:center;">
 
-  <audio id="audioPlayer" controls style="width:90%;"></audio>
+  <h2 style="margin-bottom:20px;">Coming Alive Soon</h2>
 
-  <br>
+  <p style="color:#aaa;font-size:18px;line-height:1.6;">
+    We’re building a real Southern radio experience — no algorithms, no filler.
+    <br><br>
+    Want your band in rotation?
+  </p>
 
-  <button onclick="toggleShuffle()" style="margin-top:10px;padding:8px 15px;">
-    Shuffle: Off
-  </button>
+  <div style="margin-top:30px;">
+    <a href="submit.html" style="
+      display:inline-block;
+      padding:15px 30px;
+      background:#cc0000;
+      color:white;
+      text-decoration:none;
+      border-radius:5px;
+      font-size:18px;
+    ">
+      Submit Your Band
+    </a>
+  </div>
+
 </div>
-
-<!-- PLAYLIST -->
-<div style="max-width:800px;margin:auto;padding:40px;">
-  <h2>Your Playlist (drag to reorder)</h2>
-  <div id="playlist"></div>
-</div>
-
-<script>
-const defaultTracks = [
-  {
-    name: "Replace Me – Real Band",
-    src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-    img: "https://via.placeholder.com/40"
-  },
-  {
-    name: "Add Your Bands Here",
-    src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-    img: "https://via.placeholder.com/40"
-  },
-  {
-    name: "This Is Your Radio",
-    src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
-    img: "https://via.placeholder.com/40"
-  }
-];
-
-let tracks = JSON.parse(localStorage.getItem("playlist")) || defaultTracks;
-let currentTrack = parseInt(localStorage.getItem("currentTrack")) || 0;
-let shuffle = false;
-let draggedIndex = null;
-
-const audioPlayer = document.getElementById("audioPlayer");
-const trackName = document.getElementById("trackName");
-const playlistDiv = document.getElementById("playlist");
-
-// RENDER PLAYLIST
-function renderPlaylist() {
-  playlistDiv.innerHTML = "";
-
-  tracks.forEach((track, index) => {
-    const item = document.createElement("div");
-
-    item.draggable = true;
-    item.dataset.index = index;
-
-    item.style.display = "flex";
-    item.style.alignItems = "center";
-    item.style.margin = "10px 0";
-    item.style.cursor = "grab";
-
-    item.innerHTML = `
-      <img src="${track.img}" style="width:40px;height:40px;border-radius:5px;margin-right:10px;">
-      <span>${track.name}</span>
-    `;
-
-    item.onclick = () => playTrack(index);
-
-    item.addEventListener("dragstart", (e) => draggedIndex = index);
-    item.addEventListener("dragover", (e) => e.preventDefault());
-    item.addEventListener("drop", (e) => {
-      const targetIndex = index;
-      const moved = tracks.splice(draggedIndex, 1)[0];
-      tracks.splice(targetIndex, 0, moved);
-      savePlaylist();
-      renderPlaylist();
-    });
-
-    playlistDiv.appendChild(item);
-  });
-}
-
-// PLAY TRACK
-function playTrack(index) {
-  currentTrack = index;
-
-  localStorage.setItem("currentTrack", currentTrack);
-  localStorage.setItem("currentTime", 0);
-
-  audioPlayer.src = tracks[index].src;
-  trackName.innerText = tracks[index].name;
-
-  audioPlayer.play().catch(() => {});
-}
-
-// SAVE PLAYLIST
-function savePlaylist() {
-  localStorage.setItem("playlist", JSON.stringify(tracks));
-}
-
-// SHUFFLE
-function toggleShuffle() {
-  shuffle = !shuffle;
-  document.querySelector("button").innerText = "Shuffle: " + (shuffle ? "On" : "Off");
-}
-
-// CONTINUOUS RADIO
-audioPlayer.addEventListener("ended", () => {
-  if (shuffle) {
-    currentTrack = Math.floor(Math.random() * tracks.length);
-  } else {
-    currentTrack = (currentTrack + 1) % tracks.length;
-  }
-  playTrack(currentTrack);
-});
-
-// SAVE POSITION
-audioPlayer.addEventListener("timeupdate", () => {
-  localStorage.setItem("currentTime", audioPlayer.currentTime);
-});
-
-// RESTORE POSITION
-const savedTime = parseFloat(localStorage.getItem("currentTime")) || 0;
-
-audioPlayer.addEventListener("loadedmetadata", () => {
-  audioPlayer.currentTime = savedTime;
-});
-
-// INIT
-renderPlaylist();
-playTrack(currentTrack);
-</script>
 
 </body>
 </html>

@@ -5,8 +5,20 @@ export const bands = [
     id: "love-tractor",
     name: "Love Tractor",
     location: "Athens, GA",
-    genre: "Indie / Rock",
+    genre: "Indie / Punk",
     image: "/assets/bands/LoveTractor.jpg",
+    links: {
+      instagram: "",
+      spotify: "",
+      youtube: "YjD9Uycc01I"
+    }
+  },
+  {
+    id: "nuclear-tourist",
+    name: "Nuclear Tourist",
+    location: "Atlanta, GA",
+    genre: "Punk",
+    image: "/assets/bands/nuclear-tourist.jpg",
     links: {
       instagram: "",
       spotify: "",
@@ -14,30 +26,13 @@ export const bands = [
     }
   }
 ];
-  {
-    id: "nuclear-tourist",
-    name: "Nuclear Tourist",
-    location: "Atlanta, GA",
-    genre: "Punk",
-    image: "/assets/bands/nuclear-tourist.jpg",
-    links: {}
-  },
-  {
-    id: "the-woggles",
-    name: "The Woggles",
-    location: "Atlanta, GA",
-    genre: "Garage Rock",
-    image: "/assets/bands/woggles.jpg",
-    links: {}
-  }
-];
 
 export const videos = [
   {
     id: "vid1",
-    bandId: "tunabunny",
-    title: "Tunabunny - Live",
-    youtubeId: "dQw4w9WgXcQ",
+    bandId: "love-tractor",
+    title: "Love Tractor - Video",
+    youtubeId: "YjD9Uycc01I",
     state: "georgia"
   },
   {
@@ -53,15 +48,8 @@ export const radio = [
   {
     id: "track1",
     title: "Swamp Static",
-    band: "Tunabunny",
+    band: "Love Tractor",
     file: "/assets/music/swamp-static.mp3",
-    category: "Georgia"
-  },
-  {
-    id: "track2",
-    title: "Backwoods Signal",
-    band: "Nuclear Tourist",
-    file: "/assets/music/backwoods-signal.mp3",
     category: "Georgia"
   }
 ];

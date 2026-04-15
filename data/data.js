@@ -2,17 +2,18 @@
 
 export const bands = [
   {
-    id: "Lovetractor",
+    id: "love-tractor",
     name: "Love Tractor",
     location: "Athens, GA",
-    genre: "Indie / Punk",
+    genre: "Indie / Rock",
     image: "/assets/bands/LoveTractor.jpg",
     links: {
       instagram: "",
       spotify: "",
-      youtube: "YjD9Uycc01I"
+      youtube: ""
     }
-  },
+  }
+];
   {
     id: "nuclear-tourist",
     name: "Nuclear Tourist",

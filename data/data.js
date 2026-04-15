@@ -2,15 +2,15 @@
 
 export const bands = [
   {
-    id: "tunabunny",
-    name: "Tunabunny",
+    id: "Lovetractor",
+    name: "Love Tractor",
     location: "Athens, GA",
     genre: "Indie / Punk",
-    image: "/assets/bands/tunabunny.jpg",
+    image: "/assets/bands/LoveTractor.jpg",
     links: {
       instagram: "",
       spotify: "",
-      youtube: ""
+      youtube: "YjD9Uycc01I"
     }
   },
   {

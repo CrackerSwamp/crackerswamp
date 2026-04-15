@@ -10,7 +10,7 @@ export const bands = [
     links: {
       instagram: "",
       spotify: "",
-      youtube: "YjD9Uycc01I"
+      youtube: "biYofdnvXGk"
     }
   },
   {

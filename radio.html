@@ -12,7 +12,6 @@
       text-align:center;
     }
 
-    /* 📱 MOBILE WIDTH */
     .radio {
       width:95%;
       max-width:520px;
@@ -24,25 +23,28 @@
       box-shadow:0 0 30px #000;
     }
 
-    /* 🔥 TRIPLE BEAD BODY */
-    .radio:before,
-    .radio:after {
+    /* TRIPLE BEAD BODY */
+    .radio:before {
       content:"";
       position:absolute;
       inset:0;
+      border:3px solid #d4af37;
       border-radius:12px;
-      pointer-events:none;
     }
 
-    .radio:before { border:3px solid #d4af37; }
-    .radio:after  { inset:5px; border:2px solid #8b6a2b; }
+    .radio:after {
+      content:"";
+      position:absolute;
+      inset:5px;
+      border:2px solid #8b6a2b;
+      border-radius:10px;
+    }
 
     .innerBead {
       position:absolute;
       inset:10px;
       border:1px solid #2a1a10;
-      border-radius:10px;
-      pointer-events:none;
+      border-radius:8px;
     }
 
     .top {
@@ -51,7 +53,7 @@
       align-items:center;
     }
 
-    /* 🔊 SPEAKERS */
+    /* SPEAKERS */
     .speaker {
       width:120px;
       height:120px;
@@ -70,7 +72,7 @@
       to { transform:scale(1.06); }
     }
 
-    /* 🔥 TRIPLE BEAD SPEAKERS */
+    /* TRIPLE BEAD SPEAKERS */
     .speaker:before {
       content:"";
       position:absolute;
@@ -87,14 +89,13 @@
       border-radius:50%;
     }
 
-    /* 📟 SCREEN */
+    /* SCREEN */
     .screenWrap {
       width:34%;
       position:relative;
       padding:6px;
     }
 
-    /* 🔥 TRIPLE BEAD SCREEN */
     .screenWrap:before {
       content:"";
       position:absolute;
@@ -136,15 +137,27 @@
       to { transform:translateX(-100%); }
     }
 
-    /* BUTTONS */
+    /* CONTROLS */
     .controls {
-      margin-top:10px;
+      margin-top:6px;
+    }
+
+    .btnRowTop {
+      display:flex;
+      justify-content:center;
+      gap:6px;
+      margin-bottom:2px;
+    }
+
+    .btnRowBottom {
+      display:flex;
+      justify-content:center;
+      gap:6px;
     }
 
     button {
       width:36px;
       height:30px;
-      margin:3px;
       background:#1f1f1f;
       color:#fff;
       border:none;
@@ -156,6 +169,10 @@
       display:flex;
       justify-content:space-around;
       margin-top:10px;
+    }
+
+    .knobWrap {
+      text-align:center;
     }
 
     .knob {
@@ -175,6 +192,13 @@
       top:10px;
       left:50%;
       transform:translateX(-50%);
+    }
+
+    .knobLabel {
+      font-size:11px;
+      margin-top:4px;
+      color:#bfa77a;
+      letter-spacing:1px;
     }
 
   </style>
@@ -197,18 +221,40 @@
     <div class="speaker" id="spkR"></div>
   </div>
 
+  <!-- CONTROLS -->
   <div class="controls">
-    <button onclick="btn('Prev'); prev()">⏮</button>
-    <button onclick="btn('Play'); play()">▶</button>
-    <button onclick="btn('Pause'); pause()">⏸</button>
-    <button onclick="btn('Next'); next()">⏭</button>
-    <button onclick="btn('Loop'); toggleLoop()">🔁</button>
-    <button onclick="btn('Random'); shuffleToggle()">🔀</button>
+
+    <div class="btnRowTop">
+      <button onclick="btn('Prev'); prev()">⏮</button>
+      <button onclick="btn('Play'); play()">▶</button>
+      <button onclick="btn('Pause'); pause()">⏸</button>
+      <button onclick="btn('Next'); next()">⏭</button>
+    </div>
+
+    <div class="btnRowBottom">
+      <button onclick="btn('Loop'); toggleLoop()">🔁</button>
+      <button onclick="btn('Random'); shuffleToggle()">🔀</button>
+    </div>
+
   </div>
 
+  <!-- KNOBS -->
   <div class="knobs">
-    <div class="knob" onclick="volumeUp()"><div class="indicator"></div></div>
-    <div class="knob" onclick="tune()"><div class="indicator"></div></div>
+
+    <div class="knobWrap">
+      <div class="knob" onclick="volumeUp()">
+        <div class="indicator"></div>
+      </div>
+      <div class="knobLabel">VOL</div>
+    </div>
+
+    <div class="knobWrap">
+      <div class="knob" onclick="tune()">
+        <div class="indicator"></div>
+      </div>
+      <div class="knobLabel">TUNE</div>
+    </div>
+
   </div>
 
 </div>

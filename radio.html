@@ -5,7 +5,7 @@
 
   <style>
     body {
-      background:#0b0b0b;
+      background:linear-gradient(#0b0b0b,#000);
       color:white;
       font-family:Arial;
       margin:0;
@@ -18,42 +18,64 @@
     }
 
     .nav img {
-      height:195px;
+      height:150px;
     }
 
-    .player {
-      margin-top:60px;
+    .radio-box {
+      margin-top:40px;
+    }
+
+    #art {
+      width:300px;
+      height:300px;
+      object-fit:cover;
+      border-radius:10px;
+      box-shadow:0 0 20px rgba(255,255,255,0.1);
     }
 
     #nowPlaying {
-      font-size:22px;
-      margin-bottom:10px;
+      font-size:26px;
+      margin-top:20px;
     }
 
-    .sub {
-      color:#777;
-      font-size:14px;
-      margin-bottom:20px;
+    #location {
+      color:#888;
+      margin-top:5px;
+    }
+
+    .live {
+      margin-top:10px;
+      color:red;
+      font-weight:bold;
+    }
+
+    #startBtn {
+      padding:15px 30px;
+      font-size:18px;
+      background:red;
+      color:white;
+      border:none;
+      margin-top:30px;
+      cursor:pointer;
+    }
+
+    .controls {
+      margin-top:25px;
+      display:none;
     }
 
     .controls button {
-      padding:12px 25px;
+      padding:12px 20px;
       margin:5px;
       background:#1f1f1f;
       color:white;
       border:none;
-      cursor:pointer;
       font-size:16px;
+      cursor:pointer;
     }
 
     .controls button:hover {
       background:#333;
-    }
-
-    .status {
-      margin-top:15px;
-      color:#666;
-      font-size:14px;
     }
   </style>
 </head>
@@ -63,22 +85,21 @@
   <img src="CRACKERSWAMP.png">
 </div>
 
-<h1>Cracker Swamp Radio</h1>
-<p>Real bands. No filler.</p>
+<div class="radio-box">
 
-<div class="player">
+  <img id="art" src="https://via.placeholder.com/300">
 
-  <div id="nowPlaying">Loading...</div>
-  <div id="location" class="sub"></div>
+  <div id="nowPlaying">Cracker Swamp Radio</div>
+  <div id="location"></div>
+  <div class="live">● LIVE</div>
+
+  <button id="startBtn">▶ Start Radio</button>
 
   <div class="controls">
-    <button onclick="prev()">⏮ Prev</button>
-    <button onclick="play()">▶ Play</button>
-    <button onclick="pause()">⏸ Pause</button>
-    <button onclick="next()">⏭ Next</button>
+    <button onclick="prev()">⏮</button>
+    <button onclick="pause()">⏸</button>
+    <button onclick="next()">⏭</button>
   </div>
-
-  <div class="status" id="status"></div>
 
 </div>
 
@@ -107,9 +128,11 @@ let current = 0;
 const audio = document.getElementById("audioPlayer");
 const now = document.getElementById("nowPlaying");
 const loc = document.getElementById("location");
-const status = document.getElementById("status");
+const art = document.getElementById("art");
+const startBtn = document.getElementById("startBtn");
+const controls = document.querySelector(".controls");
 
-// SHUFFLE
+// shuffle
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -117,71 +140,66 @@ function shuffle(array) {
   }
 }
 
-// LOAD SONGS
-async function loadSongs() {
+// extract youtube thumbnail
+function getThumb(video) {
+  if (!video || !video.includes("v=")) return "";
+  let id = video.split("v=")[1].split("&")[0];
+  return "https://img.youtube.com/vi/" + id + "/0.jpg";
+}
 
+// load songs
+async function loadSongs() {
   const snapshot = await getDocs(collection(db, "bands"));
 
-  playlist = [];
-
-  snapshot.forEach((docItem) => {
-    let b = docItem.data();
+  snapshot.forEach(doc => {
+    let b = doc.data();
     if (b.mp3) playlist.push(b);
   });
 
-  if (playlist.length > 0) {
-    shuffle(playlist);
-    loadTrack(0);
-  } else {
-    now.innerText = "No songs available";
-  }
+  shuffle(playlist);
 }
 
-// LOAD TRACK (simple + reliable)
-function loadTrack(index) {
-  current = index;
-  let song = playlist[index];
+// load track
+function loadTrack(i) {
+  current = i;
+  let song = playlist[i];
 
   audio.src = song.mp3;
 
   now.innerHTML = `<strong>${song.name}</strong>`;
   loc.innerText = song.location || "";
-  status.innerText = "Ready";
+
+  let thumb = getThumb(song.video);
+  if (thumb) art.src = thumb;
 }
 
-// PLAY (always works after click)
-window.play = function() {
+// start
+startBtn.onclick = () => {
+  loadTrack(0);
   audio.play().then(() => {
-    status.innerText = "Playing";
-  }).catch(() => {
-    status.innerText = "Click Play again";
+    startBtn.style.display = "none";
+    controls.style.display = "block";
   });
 };
 
-// PAUSE
-window.pause = function() {
-  audio.pause();
-  status.innerText = "Paused";
-};
-
-// NEXT
+// controls
 window.next = function() {
   let n = (current + 1) % playlist.length;
   loadTrack(n);
-  play();
+  audio.play();
 };
 
-// PREV
 window.prev = function() {
   let p = (current - 1 + playlist.length) % playlist.length;
   loadTrack(p);
-  play();
+  audio.play();
 };
 
-// AUTO NEXT
-audio.addEventListener("ended", () => {
-  next();
-});
+window.pause = function() {
+  audio.pause();
+};
+
+audio.addEventListener("ended", () => next());
 
 loadSongs();
 

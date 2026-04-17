@@ -71,10 +71,10 @@
   <div id="nowPlaying">Loading...</div>
   <div id="location" class="sub"></div>
 
-  <!-- CUSTOM CONTROLS -->
   <div class="controls">
     <button onclick="prev()">⏮ Prev</button>
-    <button onclick="togglePlay()">▶ Play</button>
+    <button onclick="play()">▶ Play</button>
+    <button onclick="pause()">⏸ Pause</button>
     <button onclick="next()">⏭ Next</button>
   </div>
 
@@ -82,7 +82,6 @@
 
 </div>
 
-<!-- HIDDEN AUDIO -->
 <audio id="audioPlayer"></audio>
 
 <script type="module">
@@ -104,14 +103,13 @@ const db = getFirestore(app);
 
 let playlist = [];
 let current = 0;
-let isPlaying = false;
 
 const audio = document.getElementById("audioPlayer");
 const now = document.getElementById("nowPlaying");
 const loc = document.getElementById("location");
 const status = document.getElementById("status");
 
-// 🔥 SHUFFLE
+// SHUFFLE
 function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -151,28 +149,32 @@ function loadTrack(index) {
 
   now.innerHTML = `<strong>${song.name}</strong>`;
   loc.innerText = song.location || "";
-  status.innerText = "Ready";
 
-  isPlaying = false;
+  status.innerText = "Ready";
 }
 
-// PLAY / PAUSE
-window.togglePlay = function() {
+// PLAY
+window.play = function() {
 
-  if (!audio.src) return;
+  if (!playlist.length) return;
 
-  if (!isPlaying) {
-    audio.play().then(() => {
-      isPlaying = true;
-      status.innerText = "Playing";
-    }).catch(() => {
-      status.innerText = "Click Play to start";
-    });
-  } else {
-    audio.pause();
-    isPlaying = false;
-    status.innerText = "Paused";
+  let song = playlist[current];
+
+  if (!audio.src) {
+    audio.src = song.mp3;
   }
+
+  audio.play().then(() => {
+    status.innerText = "Playing";
+  }).catch(() => {
+    status.innerText = "Click again to start";
+  });
+};
+
+// PAUSE
+window.pause = function() {
+  audio.pause();
+  status.innerText = "Paused";
 };
 
 // NEXT
@@ -180,7 +182,7 @@ window.next = function() {
   let n = current + 1;
   if (n >= playlist.length) n = 0;
   loadTrack(n);
-  togglePlay();
+  play();
 };
 
 // PREV
@@ -188,7 +190,7 @@ window.prev = function() {
   let p = current - 1;
   if (p < 0) p = playlist.length - 1;
   loadTrack(p);
-  togglePlay();
+  play();
 };
 
 // AUTO NEXT

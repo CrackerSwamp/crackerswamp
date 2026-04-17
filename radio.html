@@ -22,25 +22,37 @@
     }
 
     .player {
-      margin-top:50px;
-    }
-
-    button {
-      padding:10px 20px;
-      margin:5px;
-      background:#222;
-      color:white;
-      border:none;
-      cursor:pointer;
+      margin-top:60px;
     }
 
     #nowPlaying {
-      margin-top:20px;
-      font-size:20px;
+      font-size:22px;
+      margin-bottom:10px;
     }
 
     .sub {
       color:#777;
+      font-size:14px;
+      margin-bottom:20px;
+    }
+
+    .controls button {
+      padding:12px 25px;
+      margin:5px;
+      background:#1f1f1f;
+      color:white;
+      border:none;
+      cursor:pointer;
+      font-size:16px;
+    }
+
+    .controls button:hover {
+      background:#333;
+    }
+
+    .status {
+      margin-top:15px;
+      color:#666;
       font-size:14px;
     }
   </style>
@@ -56,16 +68,22 @@
 
 <div class="player">
 
-  <audio id="audioPlayer" controls></audio>
-
   <div id="nowPlaying">Loading...</div>
+  <div id="location" class="sub"></div>
 
-  <div>
-    <button onclick="prev()">Prev</button>
-    <button onclick="next()">Next</button>
+  <!-- CUSTOM CONTROLS -->
+  <div class="controls">
+    <button onclick="prev()">⏮ Prev</button>
+    <button onclick="togglePlay()">▶ Play</button>
+    <button onclick="next()">⏭ Next</button>
   </div>
 
+  <div class="status" id="status"></div>
+
 </div>
+
+<!-- HIDDEN AUDIO -->
+<audio id="audioPlayer"></audio>
 
 <script type="module">
 
@@ -86,9 +104,12 @@ const db = getFirestore(app);
 
 let playlist = [];
 let current = 0;
+let isPlaying = false;
 
 const audio = document.getElementById("audioPlayer");
 const now = document.getElementById("nowPlaying");
+const loc = document.getElementById("location");
+const status = document.getElementById("status");
 
 // 🔥 SHUFFLE
 function shuffle(array) {
@@ -115,42 +136,59 @@ async function loadSongs() {
 
   if (playlist.length > 0) {
     shuffle(playlist);
-    play(0);
+    loadTrack(0);
   } else {
-    now.innerText = "No songs available yet";
+    now.innerText = "No songs available";
   }
 }
 
-// PLAY
-function play(index) {
-
+// LOAD TRACK
+function loadTrack(index) {
   current = index;
   let song = playlist[index];
 
   audio.src = song.mp3;
 
-  audio.play().catch(() => {
-    now.innerText = "Click play to start radio";
-  });
+  now.innerHTML = `<strong>${song.name}</strong>`;
+  loc.innerText = song.location || "";
+  status.innerText = "Ready";
 
-  now.innerHTML = `
-    <strong>${song.name}</strong><br>
-    <span class="sub">${song.location || ""}</span>
-  `;
+  isPlaying = false;
 }
+
+// PLAY / PAUSE
+window.togglePlay = function() {
+
+  if (!audio.src) return;
+
+  if (!isPlaying) {
+    audio.play().then(() => {
+      isPlaying = true;
+      status.innerText = "Playing";
+    }).catch(() => {
+      status.innerText = "Click Play to start";
+    });
+  } else {
+    audio.pause();
+    isPlaying = false;
+    status.innerText = "Paused";
+  }
+};
 
 // NEXT
 window.next = function() {
   let n = current + 1;
   if (n >= playlist.length) n = 0;
-  play(n);
+  loadTrack(n);
+  togglePlay();
 };
 
 // PREV
 window.prev = function() {
   let p = current - 1;
   if (p < 0) p = playlist.length - 1;
-  play(p);
+  loadTrack(p);
+  togglePlay();
 };
 
 // AUTO NEXT

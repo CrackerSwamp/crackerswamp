@@ -1,124 +1,179 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Cracker Swamp Radio</title>
+  <title>Radio</title>
 
   <style>
-    body {
+    body{
       background:#0b0b0b;
       margin:0;
       font-family:Arial;
-      color:#f5e6c8;
+      color:#e9d7b3;
       text-align:center;
     }
 
-    .radio {
+    .radio{
       width:900px;
       margin:40px auto;
-      padding:20px;
-      background:
-        linear-gradient(135deg,#5a3e2b,#3a2518);
+      padding:20px 20px 25px;
+      background:linear-gradient(135deg,#5b3f2b,#3a2518);
       border:10px solid #2a1a10;
       border-radius:12px;
-      box-shadow:0 0 40px black;
+      box-shadow:0 0 40px #000;
       position:relative;
     }
 
-    /* decorative bead edge */
-    .radio:before {
+    /* subtle inner bead on cabinet */
+    .radio:before{
       content:"";
       position:absolute;
-      top:5px; left:5px; right:5px; bottom:5px;
+      inset:6px;
       border:2px dotted #8b5a2b;
       pointer-events:none;
+      border-radius:8px;
     }
 
-    .title {
-      font-size:26px;
-      color:#d4af37;
-      letter-spacing:4px;
-      margin-bottom:10px;
-    }
-
-    /* speaker + screen row */
-    .top {
+    /* --- TOP ROW --- */
+    .top{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      margin-top:10px;
+      margin-top:5px;
     }
 
-    .speaker {
-      width:180px;
-      height:180px;
+    /* SPEAKERS (2x + beaded rings) */
+    .speaker{
+      width:190px;
+      height:190px;
       border-radius:50%;
+      position:relative;
       background:radial-gradient(#444,#000);
-      box-shadow:inset 0 0 30px black;
+      box-shadow:inset 0 0 35px #000;
     }
 
-    .screen {
+    .speaker:before,
+    .speaker:after{
+      content:"";
+      position:absolute;
+      border-radius:50%;
+      pointer-events:none;
+    }
+
+    /* outer bead */
+    .speaker:before{
+      inset:-8px;
+      border:3px dotted #c8a96a;
+    }
+
+    /* inner bead */
+    .speaker:after{
+      inset:8px;
+      border:2px dotted #6e5130;
+    }
+
+    /* --- SCREEN (half width + triple bead) --- */
+    .screenWrap{
       width:50%;
-      background:black;
-      color:#00ff88;
+      position:relative;
       padding:10px;
-      overflow:hidden;
+    }
+
+    .screenBead1,
+    .screenBead2,
+    .screenBead3{
+      position:absolute;
+      inset:0;
+      border-radius:4px;
+      pointer-events:none;
+    }
+
+    .screenBead1{ border:3px solid #d4af37; }
+    .screenBead2{ inset:4px; border:2px solid #8b6a2b; }
+    .screenBead3{ inset:8px; border:1px solid #3a2a12; }
+
+    .screen{
+      position:relative;
+      background:#000;
+      color:#00ff88;
+      padding:8px 6px;
+      font-family:"Courier New", monospace;
       white-space:nowrap;
-      font-family:Courier New;
-      border:2px solid #333;
+      overflow:hidden;
     }
 
-    .scroll {
+    .scroll{
       display:inline-block;
-      animation: scroll 10s linear infinite;
+      animation:scroll 10s linear infinite;
     }
 
-    @keyframes scroll {
-      from { transform: translateX(100%); }
-      to { transform: translateX(-100%); }
+    @keyframes scroll{
+      from{ transform:translateX(100%); }
+      to{ transform:translateX(-100%); }
     }
 
-    /* knobs */
-    .knobs {
+    /* --- CONTROLS ROW --- */
+    .controlRow{
       display:flex;
-      justify-content:space-around;
-      margin-top:20px;
+      justify-content:space-between;
+      align-items:flex-start;
+      margin-top:22px;
+      padding:0 60px;
     }
 
-    .knob {
-      width:80px;
-      height:80px;
+    /* KNOBS */
+    .knobWrap{
+      text-align:center;
+    }
+
+    .knob{
+      width:85px;
+      height:85px;
       border-radius:50%;
       background:#222;
+      box-shadow:inset 0 0 12px #000;
       position:relative;
       cursor:pointer;
-      box-shadow:inset 0 0 10px black;
+      margin-bottom:6px;
     }
 
-    .indicator {
+    .indicator{
       width:4px;
       height:30px;
       background:#d4af37;
       position:absolute;
-      top:10px;
+      top:12px;
       left:50%;
+      transform:translateX(-50%);
       transform-origin:bottom center;
     }
 
-    /* buttons under knobs */
-    .controls {
-      margin-top:15px;
+    .label{
+      font-size:12px;
+      letter-spacing:1px;
+      color:#bfa77a;
     }
 
-    button {
-      padding:10px 14px;
-      margin:5px;
+    /* BUTTONS (between knobs, symbols only) */
+    .buttons{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:center;
+      margin-top:10px;
+    }
+
+    button{
+      width:44px;
+      height:36px;
       background:#1f1f1f;
-      color:white;
+      color:#fff;
       border:none;
       cursor:pointer;
+      font-size:16px;
+      border-radius:3px;
     }
 
-    button:hover {
+    button:hover{
       background:#333;
     }
 
@@ -128,34 +183,52 @@
 
 <div class="radio">
 
-  <div class="title">CRACKER SWAMP RADIO</div>
-
   <div class="top">
-    <div class="speaker"></div>
-
-    <div class="screen">
-      <div id="scrollText" class="scroll">Loading...</div>
-    </div>
 
     <div class="speaker"></div>
+
+    <div class="screenWrap">
+      <div class="screenBead1"></div>
+      <div class="screenBead2"></div>
+      <div class="screenBead3"></div>
+
+      <div class="screen">
+        <div id="scrollText" class="scroll">Loading...</div>
+      </div>
+    </div>
+
+    <div class="speaker"></div>
+
   </div>
 
-  <div class="knobs">
-    <div class="knob" onclick="volumeUp()">
-      <div class="indicator"></div>
-    </div>
-    <div class="knob" onclick="next()">
-      <div class="indicator"></div>
-    </div>
-  </div>
+  <div class="controlRow">
 
-  <div class="controls">
-    <button onclick="play()">Play</button>
-    <button onclick="pause()">Pause</button>
-    <button onclick="prev()">Prev</button>
-    <button onclick="next()">Next</button>
-    <button onclick="toggleLoop()">Loop</button>
-    <button onclick="shuffleToggle()">Random</button>
+    <!-- LEFT KNOB -->
+    <div class="knobWrap">
+      <div class="knob" onclick="volumeUp()">
+        <div class="indicator"></div>
+      </div>
+      <div class="label">VOL</div>
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="buttons">
+      <button onclick="prev()">⏮</button>
+      <button onclick="play()">▶</button>
+      <button onclick="pause()">⏸</button>
+      <button onclick="next()">⏭</button>
+      <button onclick="toggleLoop()">🔁</button>
+      <button onclick="shuffleToggle()">🔀</button>
+    </div>
+
+    <!-- RIGHT KNOB -->
+    <div class="knobWrap">
+      <div class="knob" onclick="next()">
+        <div class="indicator"></div>
+      </div>
+      <div class="label">TUNE</div>
+    </div>
+
   </div>
 
 </div>
@@ -184,46 +257,46 @@ let loop = false;
 const audio = document.getElementById("audioPlayer");
 const scroll = document.getElementById("scrollText");
 
-async function loadSongs() {
-  const snap = await getDocs(collection(db, "bands"));
-  snap.forEach(doc => {
+async function loadSongs(){
+  const snap = await getDocs(collection(db,"bands"));
+  snap.forEach(doc=>{
     let b = doc.data();
-    if (b.mp3) playlist.push(b);
+    if(b.mp3) playlist.push(b);
   });
   loadTrack(0);
 }
 
-function loadTrack(i) {
+function loadTrack(i){
   current = i;
   let song = playlist[i];
   audio.src = song.mp3;
   scroll.innerText = song.name + " - " + (song.location || "");
 }
 
-window.play = () => audio.play();
-window.pause = () => audio.pause();
+window.play = ()=>audio.play();
+window.pause = ()=>audio.pause();
 
-window.next = function() {
+window.next = function(){
   current = randomMode ? Math.floor(Math.random()*playlist.length)
                        : (current+1)%playlist.length;
   loadTrack(current);
   play();
 };
 
-window.prev = function() {
+window.prev = function(){
   current = (current-1+playlist.length)%playlist.length;
   loadTrack(current);
   play();
 };
 
-window.toggleLoop = () => loop = !loop;
-window.shuffleToggle = () => randomMode = !randomMode;
+window.toggleLoop = ()=>loop = !loop;
+window.shuffleToggle = ()=>randomMode = !randomMode;
 
-audio.addEventListener("ended", () => {
+audio.addEventListener("ended",()=>{
   loop ? play() : next();
 });
 
-window.volumeUp = () => {
+window.volumeUp = ()=>{
   audio.volume = Math.min(1, audio.volume + 0.1);
 };
 

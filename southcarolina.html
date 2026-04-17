@@ -1,52 +1,267 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>South Carolina Music Scene - Cracker Swamp</title>
+  <title>South Carolina Scene</title>
+  <style>
+    body {
+      background:#111;
+      color:#fff;
+      font-family:Arial;
+      margin:0;
+      text-align:center;
+    }
+
+    /* NAV */
+    .nav {
+      background:#0b0b0b;
+      border-bottom:1px solid #222;
+      padding:10px;
+    }
+
+    .nav img {
+      height:195px;
+      max-width:90%;
+      margin-bottom:10px;
+    }
+
+    .nav a {
+      color:white;
+      margin:0 10px;
+      text-decoration:none;
+    }
+
+    .submit-btn {
+      padding:6px 12px;
+      background:#cc0000;
+      border-radius:5px;
+      color:white;
+      margin-left:10px;
+    }
+
+    .title {
+      padding:20px;
+      border-bottom:1px solid #222;
+    }
+
+    .card {
+      width:300px;
+      background:#1a1a1a;
+      margin:10px;
+      padding:10px;
+      display:inline-block;
+      cursor:pointer;
+      transition:0.2s;
+    }
+
+    .card:hover {
+      background:#222;
+    }
+
+    /* 🔥 FIXED IMAGE TARGETING */
+    .card img {
+      width:100%;
+    }
+
+    #overlay, #endScreen {
+      position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background:#0b0b0b;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      z-index:999;
+    }
+
+    button {
+      margin:8px;
+      padding:10px 18px;
+      background:#1f1f1f;
+      color:#fff;
+      border:none;
+      cursor:pointer;
+      border-radius:4px;
+    }
+
+    button:hover {
+      background:#333;
+    }
+  </style>
 </head>
+<body>
 
-<body style="background:#0b0b0b;color:white;font-family:Arial;margin:0;">
+<!-- 🚚 NAV -->
+<div class="nav">
+  <img src="CRACKERSWAMP.png">
 
-<!-- NAV -->
-<div style="background:#0b0b0b;border-bottom:1px solid #222;padding:15px;text-align:center;">
-  <span style="font-size:20px;font-weight:bold;margin-right:20px;">Cracker Swamp</span>
-
-  <a href="index.html" style="color:white;margin:0 10px;">Home</a>
-  <a href="georgia.html" style="color:white;margin:0 10px;">Georgia</a>
-  <a href="alabama.html" style="color:white;margin:0 10px;">Alabama</a>
-  <a href="florida.html" style="color:white;margin:0 10px;">Florida</a>
-  <a href="southcarolina.html" style="color:white;margin:0 10px;">South Carolina</a>
-  <a href="louisiana.html" style="color:white;margin:0 10px;">Louisiana</a>
-  <a href="mississippi.html" style="color:white;margin:0 10px;">Mississippi</a>
-  <a href="radio.html" style="color:white;margin:0 10px;">Radio</a>
-  <a href="about.html" style="color:white;margin:0 10px;">About</a>
-
-  <a href="submit.html" style="color:white;margin-left:15px;padding:8px 15px;background:#cc0000;border-radius:5px;">
-    Submit
-  </a>
-</div>
-
-<!-- HEADER -->
-<div style="padding:80px 20px;text-align:center;">
-  <h1 style="font-size:50px;">South Carolina Music Scene</h1>
-  <p style="color:#ccc;">Real bands. Real sound. No industry BS.</p>
-  <p style="color:#888;">All signal. No noise.</p>
-</div>
-
-<!-- CONTENT -->
-<div style="padding:40px;max-width:900px;margin:auto;">
-
-  <h2>Featured Bands</h2>
-
-  <div style="margin-top:30px;padding:20px;background:#111;border-radius:8px;display:flex;gap:20px;">
-    <img src="https://via.placeholder.com/100" style="width:100px;height:100px;object-fit:cover;border-radius:5px;">
-    <div>
-      <h3>Band of Horses</h3>
-      <p style="color:#aaa;">Charleston, SC</p>
-      <p>Atmospheric indie rock with southern depth and wide open sound.</p>
-    </div>
+  <div>
+    <a href="index.html">Home</a>
+    <a href="radio.html">Radio</a>
+    <a href="bands.html">Bands</a>
+    <a href="store.html">Merch</a>
+    <a href="submit.html" class="submit-btn">Submit</a>
   </div>
-
 </div>
+
+<!-- TITLE -->
+<div class="title">
+  <h1>South Carolina Scene</h1>
+</div>
+
+<!-- BANDS -->
+<div id="bands"></div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+let player;
+
+function extractID(url) {
+  if (!url) return "";
+  if (url.includes("v=")) {
+    return url.split("v=")[1].split("&")[0];
+  }
+  return "";
+}
+
+function playVideo(index, list) {
+
+  let band = list[index];
+  let id = extractID(band.video);
+
+  const overlay = document.createElement("div");
+  overlay.id = "overlay";
+
+  const playerDiv = document.createElement("div");
+  playerDiv.id = "ytplayer";
+  playerDiv.style.display = "none";
+
+  overlay.appendChild(playerDiv);
+  document.body.appendChild(overlay);
+
+  let done = false;
+
+  player = new YT.Player("ytplayer", {
+    height: "450",
+    width: "800",
+    videoId: id,
+    playerVars: { autoplay: 1 },
+    events: {
+
+      onReady: (e) => e.target.playVideo(),
+
+      onStateChange: (e) => {
+
+        if (e.data === 1) {
+          playerDiv.style.display = "block";
+        }
+
+        if (e.data === 0 && !done) {
+          done = true;
+          overlay.remove();
+          showEndScreen(index, list, false);
+        }
+      },
+
+      onError: () => {
+        if (!done) {
+          done = true;
+          overlay.remove();
+          showEndScreen(index, list, true);
+        }
+      }
+    }
+  });
+
+  setTimeout(() => {
+    if (!done) {
+      done = true;
+      overlay.remove();
+      showEndScreen(index, list, true);
+    }
+  }, 4000);
+}
+
+// END SCREEN
+function showEndScreen(index, list, failed=false) {
+
+  let band = list[index];
+  let id = extractID(band.video);
+
+  const end = document.createElement("div");
+  end.id = "endScreen";
+
+  end.innerHTML = `
+    <h1 style="font-size:48px;">South Carolina Scene</h1>
+
+    <img src="https://img.youtube.com/vi/${id}/0.jpg"
+      style="width:220px;margin:20px 0;border-radius:6px;">
+
+    <h2 style="font-size:26px;color:#ddd;">${band.name}</h2>
+
+    ${failed ? `<p style="color:#777;">YouTube blocked this video</p>` : ``}
+
+    <div>
+      <button onclick="replay(${index})">Replay</button>
+      <button onclick="next(${index})">Next</button>
+      <button onclick="closeEnd()">Close</button>
+    </div>
+  `;
+
+  document.body.appendChild(end);
+}
+
+function replay(i){
+  closeEnd();
+  playVideo(i, filtered);
+}
+
+function next(i){
+  closeEnd();
+  let n = i + 1;
+  if(n >= filtered.length) n = 0;
+  playVideo(n, filtered);
+}
+
+function closeEnd(){
+  let e = document.getElementById("endScreen");
+  if(e) e.remove();
+}
+
+// DATA
+let bands = JSON.parse(localStorage.getItem("bands")) || [];
+
+let filtered = bands.filter(function(b) {
+  if (!b.location) return false;
+  let loc = b.location.toLowerCase();
+  return loc.includes("sc") || loc.includes("south carolina");
+});
+
+const container = document.getElementById("bands");
+
+// BUILD CARDS
+filtered.forEach(function(b, i) {
+
+  let id = extractID(b.video);
+
+  const div = document.createElement("div");
+  div.className = "card";
+
+  div.innerHTML = `
+    <img src="https://img.youtube.com/vi/${id}/0.jpg">
+    <h3>${b.name || "Unknown Band"}</h3>
+    <p>${b.location || ""}</p>
+  `;
+
+  div.onclick = function() {
+    playVideo(i, filtered);
+  };
+
+  container.appendChild(div);
+
+});
+</script>
 
 </body>
 </html>

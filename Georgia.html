@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Georgia Scene</title>
+  <style>
+    body {
+      background:#111;
+      color:#fff;
+      font-family:Arial;
+      margin:0;
+      text-align:center;
+    }
+
+    .nav {
+      background:#0b0b0b;
+      border-bottom:1px solid #222;
+      padding:10px;
+    }
+
+    .nav img {
+      height:195px;
+      max-width:90%;
+      margin-bottom:10px;
+    }
+
+    .nav a {
+      color:white;
+      margin:0 10px;
+      text-decoration:none;
+    }
+
+    .submit-btn {
+      padding:6px 12px;
+      background:#cc0000;
+      border-radius:5px;
+      color:white;
+      margin-left:10px;
+    }
+
+    .title {
+      padding:20px;
+      border-bottom:1px solid #222;
+    }
+
+    .card {
+      width:300px;
+      background:#1a1a1a;
+      margin:10px;
+      padding:10px;
+      display:inline-block;
+      cursor:pointer;
+    }
+
+    .card:hover {
+      background:#222;
+    }
+
+    .card img {
+      width:100%;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <img src="CRACKERSWAMP.png">
+  <div>
+    <a href="index.html">Home</a>
+    <a href="radio.html">Radio</a>
+    <a href="bands.html">Bands</a>
+    <a href="store.html">Merch</a>
+    <a href="submit.html" class="submit-btn">Submit</a>
+  </div>
+</div>
+
+<!-- TITLE -->
+<div class="title">
+  <h1>Georgia Scene</h1>
+</div>
+
+<!-- BANDS -->
+<div id="bands"></div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBPq01s5eS_GQ_ECkfZsoT5Oo977gPpMS0",
+  authDomain: "cracker-swamp.firebaseapp.com",
+  projectId: "cracker-swamp",
+  storageBucket: "cracker-swamp.firebasestorage.app",
+  messagingSenderId: "217552202123",
+  appId: "1:217552202123:web:ed04bd70294f3713fa678e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const container = document.getElementById("bands");
+
+async function loadBands() {
+
+  const snapshot = await getDocs(collection(db, "bands"));
+
+  container.innerHTML = "";
+
+  snapshot.forEach((docItem) => {
+
+    let b = docItem.data();
+
+    // 🔥 FILTER GEORGIA
+    let loc = (b.location || "").toLowerCase();
+    if (!loc.includes("ga") && !loc.includes("georgia")) return;
+
+    let div = document.createElement("div");
+    div.className = "card";
+
+    let id = "";
+    if (b.video && b.video.includes("v=")) {
+      id = b.video.split("v=")[1].split("&")[0];
+    }
+
+    div.innerHTML = `
+      <img src="https://img.youtube.com/vi/${id}/0.jpg">
+      <h3>${b.name || "Unknown Band"}</h3>
+      <p>${b.location || ""}</p>
+    `;
+
+    container.appendChild(div);
+  });
+
+}
+
+loadBands();
+
+</script>
+
+</body>
+</html>

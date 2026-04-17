@@ -1,166 +1,167 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Radio - Cracker Swamp</title>
-</head>
+  <title>Cracker Swamp Radio</title>
+  <style>
+    body {
+      background:#0b0b0b;
+      color:white;
+      font-family:Arial;
+      margin:0;
+      text-align:center;
+    }
 
-<body style="background:#0b0b0b;color:white;font-family:Arial;margin:0;">
+    /* NAV */
+    .nav {
+      background:#0b0b0b;
+      border-bottom:1px solid #222;
+      padding:10px;
+    }
 
-<!-- NAV -->
-<div style="background:#0b0b0b;border-bottom:1px solid #222;padding:12px;text-align:center;">
-  <div style="font-size:20px;font-weight:bold;margin-bottom:10px;">Cracker Swamp</div>
+    .nav img {
+      height:195px;
+      max-width:90%;
+      margin-bottom:10px;
+    }
 
-  <div style="line-height:2;">
-    <a href="index.html" style="color:white;margin:0 10px;">Home</a>
-    <a href="scenes.html" style="color:white;margin:0 10px;">Scenes</a>
-    <a href="bands.html" style="color:white;margin:0 10px;">Bands</a>
-    <a href="radio.html" style="color:white;margin:0 10px;">Radio</a>
-    <a href="store.html" style="color:white;margin:0 10px;">Store</a>
+    .nav a {
+      color:white;
+      margin:0 10px;
+      text-decoration:none;
+    }
 
-    <a href="submit.html" style="
+    .submit-btn {
       padding:6px 12px;
       background:#cc0000;
       border-radius:5px;
       color:white;
       margin-left:10px;
-      text-decoration:none;
-    ">
-      Submit
-    </a>
+    }
+
+    .header {
+      padding:30px;
+    }
+
+    .player-box {
+      max-width:600px;
+      margin:20px auto;
+      background:#111;
+      padding:20px;
+      border-radius:6px;
+    }
+
+    audio {
+      width:100%;
+      margin-top:10px;
+    }
+
+    .controls button {
+      margin:5px;
+      padding:10px 15px;
+      background:#222;
+      color:white;
+      border:none;
+      cursor:pointer;
+    }
+
+    .controls button:hover {
+      background:#333;
+    }
+
+    .now-playing {
+      font-size:18px;
+      margin-top:10px;
+      color:#ccc;
+    }
+  </style>
+</head>
+<body>
+
+<!-- 🚚 NAV -->
+<div class="nav">
+  <img src="CRACKERSWAMP.png">
+
+  <div>
+    <a href="index.html">Home</a>
+    <a href="radio.html">Radio</a>
+    <a href="bands.html">Bands</a>
+    <a href="store.html">Merch</a>
+    <a href="submit.html" class="submit-btn">Submit</a>
   </div>
 </div>
 
 <!-- HEADER -->
-<div style="padding:80px 20px;text-align:center;">
-  <h1 style="font-size:50px;">Cracker Swamp Radio</h1>
-  <p style="color:#ccc;">Real bands. No filler.</p>
-  <p style="color:#888;">All signal. No noise.</p>
+<div class="header">
+  <h1>Cracker Swamp Radio</h1>
+  <p style="color:#777;">Real bands. No filler.</p>
 </div>
 
-<!-- PLAYER PLACEHOLDER -->
-<div style="max-width:800px;margin:auto;padding:30px;background:#111;border-radius:8px;text-align:center;">
+<!-- PLAYER -->
+<div class="player-box">
+
   <h2>Now Playing</h2>
+  <div id="nowPlaying" class="now-playing">Nothing yet</div>
 
-  <p style="color:#aaa;">
-    Radio coming alive — real bands loading
-  </p>
+  <audio id="audioPlayer" controls></audio>
 
-  <audio controls style="width:90%;opacity:0.5;" disabled></audio>
-
-  <div style="margin-top:20px;">
-    <a href="submit.html" style="
-      padding:15px 30px;
-      background:#cc0000;
-      color:white;
-      text-decoration:none;
-      border-radius:5px;
-      font-size:18px;
-    ">
-      Submit Your Band
-    </a>
+  <div class="controls">
+    <button onclick="prevSong()">⏮ Prev</button>
+    <button onclick="nextSong()">⏭ Next</button>
   </div>
-</div>
 
-<!-- GENRE BUTTONS -->
-<div style="text-align:center;padding:40px;">
-  <button onclick="showGenre('rock')" style="margin:5px;">Rock</button>
-  <button onclick="showGenre('indie')" style="margin:5px;">Indie</button>
-  <button onclick="showGenre('punk')" style="margin:5px;">Punk</button>
-  <button onclick="showGenre('southernrock')" style="margin:5px;">Southern Rock</button>
-  <button onclick="showGenre('blues')" style="margin:5px;">Blues</button>
-  <button onclick="showGenre('country')" style="margin:5px;">Country</button>
-  <button onclick="showGenre('altcountry')" style="margin:5px;">Alt Country</button>
-  <button onclick="showGenre('psychedelic')" style="margin:5px;">Psychedelic</button>
-  <button onclick="showGenre('funk')" style="margin:5px;">Funk</button>
-  <button onclick="showGenre('rnb')" style="margin:5px;">R&amp;B</button>
-  <button onclick="showGenre('soul')" style="margin:5px;">Soul</button>
-  <button onclick="showGenre('garage')" style="margin:5px;">Garage</button>
-  <button onclick="showGenre('hiphop')" style="margin:5px;">Hip-Hop</button>
 </div>
-
-<!-- GENRE DISPLAY -->
-<div id="genreSection" style="max-width:800px;margin:auto;padding:20px;"></div>
 
 <script>
-const genres = {
 
-  rock: [
-    { name: "Band 1 – Rock", link: "bands.html#band1" },
-    { name: "Band 2 – Rock", link: "bands.html#band2" }
-  ],
+// 🎵 GET DATA
+let bands = JSON.parse(localStorage.getItem("bands")) || [];
 
-  indie: [
-    { name: "Band 3 – Indie", link: "bands.html#band3" }
-  ],
+// only keep ones with MP3
+let playlist = bands.filter(b => b.mp3);
 
-  punk: [
-    { name: "Band 4 – Punk", link: "bands.html#band4" }
-  ],
-
-  southernrock: [
-    { name: "Band 5 – Southern Rock", link: "bands.html#band5" }
-  ],
-
-  blues: [
-    { name: "Band 6 – Blues", link: "bands.html#band6" }
-  ],
-
-  country: [
-    { name: "Band 7 – Country", link: "bands.html#band7" }
-  ],
-
-  altcountry: [
-    { name: "Band 8 – Alt Country", link: "bands.html#band8" }
-  ],
-
-  psychedelic: [
-    { name: "Band 9 – Psychedelic", link: "bands.html#band9" }
-  ],
-
-  funk: [
-    { name: "Band 10 – Funk", link: "bands.html#band10" }
-  ],
-
-  rnb: [
-    { name: "Band 11 – R&B", link: "bands.html#band11" }
-  ],
-
-  soul: [
-    { name: "Band 12 – Soul", link: "bands.html#band12" }
-  ],
-
-  garage: [
-    { name: "Band 13 – Garage", link: "bands.html#band13" }
-  ],
-
-  hiphop: [
-    { name: "Band 14 – Hip-Hop", link: "bands.html#band14" }
-  ]
-
-};
-
-function showGenre(genre) {
-  const section = document.getElementById("genreSection");
-
-  section.innerHTML = `<h2 style="text-align:center;">Top ${genre.toUpperCase()} Bands</h2>`;
-
-  genres[genre].forEach(band => {
-    const div = document.createElement("div");
-
-    div.style.background = "#111";
-    div.style.padding = "15px";
-    div.style.margin = "10px 0";
-    div.style.borderRadius = "5px";
-
-    div.innerHTML = `
-      <a href="${band.link}" style="color:white;text-decoration:none;">
-        ${band.name}
-      </a>
-    `;
-
-    section.appendChild(div);
-  });
+// fallback demo (so it’s not empty)
+if (playlist.length === 0) {
+  playlist = [
+    { name: "Demo Track", mp3: "demo.mp3" }
+  ];
 }
+
+let current = 0;
+
+const player = document.getElementById("audioPlayer");
+const nowPlaying = document.getElementById("nowPlaying");
+
+// ▶ PLAY SONG
+function playSong(index) {
+
+  let track = playlist[index];
+
+  player.src = track.mp3;
+  player.play();
+
+  nowPlaying.innerText = track.name || "Unknown Band";
+}
+
+// ⏭ NEXT
+function nextSong() {
+  current++;
+  if (current >= playlist.length) current = 0;
+  playSong(current);
+}
+
+// ⏮ PREV
+function prevSong() {
+  current--;
+  if (current < 0) current = playlist.length - 1;
+  playSong(current);
+}
+
+// 🔁 AUTO NEXT
+player.addEventListener("ended", nextSong);
+
+// ▶ START FIRST SONG
+playSong(current);
+
 </script>
 
 </body>

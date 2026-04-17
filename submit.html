@@ -2,81 +2,139 @@
 <html>
 <head>
   <title>Submit Your Band - Cracker Swamp</title>
+  <style>
+    body {
+      background:#0b0b0b;
+      color:white;
+      font-family:Arial;
+      margin:0;
+      text-align:center;
+    }
+
+    /* NAV */
+    .nav {
+      background:#0b0b0b;
+      border-bottom:1px solid #222;
+      padding:10px;
+    }
+
+    .nav img {
+      height:195px;
+      max-width:90%;
+      margin-bottom:10px;
+    }
+
+    .nav a {
+      color:white;
+      margin:0 10px;
+      text-decoration:none;
+    }
+
+    .submit-btn {
+      padding:6px 12px;
+      background:#cc0000;
+      border-radius:5px;
+      color:white;
+      margin-left:10px;
+    }
+
+    input, textarea {
+      padding:12px;
+      width:300px;
+      margin:10px 0;
+      background:#111;
+      border:1px solid #333;
+      color:white;
+    }
+
+    button {
+      padding:15px 30px;
+      font-size:18px;
+      background:#cc0000;
+      color:white;
+      border:none;
+      border-radius:5px;
+      cursor:pointer;
+    }
+
+    button:hover {
+      background:#e60000;
+    }
+
+    .note {
+      max-width:400px;
+      margin:20px auto;
+      padding:15px;
+      background:#111;
+      border:1px solid #333;
+      border-radius:5px;
+      color:#ccc;
+      font-size:13px;
+    }
+
+  </style>
 </head>
 
-<body style="background:#0b0b0b;color:white;font-family:Arial;margin:0;">
+<body>
 
-<!-- NAV -->
-<div style="background:#0b0b0b;border-bottom:1px solid #222;padding:15px;text-align:center;">
-  <span style="font-size:20px;font-weight:bold;margin-right:20px;">Cracker Swamp</span>
+<!-- 🚚 NAV -->
+<div class="nav">
+  <img src="CRACKERSWAMP.png">
 
-  <a href="index.html" style="color:white;margin:0 10px;text-decoration:none;">Home</a>
-  <a href="georgia.html" style="color:white;margin:0 10px;text-decoration:none;">Georgia</a>
-  <a href="alabama.html" style="color:white;margin:0 10px;text-decoration:none;">Alabama</a>
-  <a href="florida.html" style="color:white;margin:0 10px;text-decoration:none;">Florida</a>
-  <a href="southcarolina.html" style="color:white;margin:0 10px;text-decoration:none;">South Carolina</a>
-  <a href="louisiana.html" style="color:white;margin:0 10px;text-decoration:none;">Louisiana</a>
-  <a href="mississippi.html" style="color:white;margin:0 10px;text-decoration:none;">Mississippi</a>
-  <a href="radio.html" style="color:white;margin:0 10px;text-decoration:none;">Radio</a>
-  <a href="about.html" style="color:white;margin:0 10px;text-decoration:none;">About</a>
-
-  <a href="submit.html" style="
-    margin-left:15px;
-    padding:8px 15px;
-    background:#cc0000;
-    border-radius:5px;
-    color:white;
-    text-decoration:none;
-  ">
-    Submit
-  </a>
+  <div>
+    <a href="index.html">Home</a>
+    <a href="radio.html">Radio</a>
+    <a href="bands.html">Bands</a>
+    <a href="store.html">Merch</a>
+    <a href="submit.html" class="submit-btn">Submit</a>
+  </div>
 </div>
 
 <!-- HEADER -->
-<div style="padding:80px;text-align:center;">
-  <h1 style="font-size:50px;margin-bottom:10px;">Submit Your Band</h1>
+<div style="padding:40px;">
+  <h1 style="font-size:50px;">Submit Your Band</h1>
 
-  <p style="color:#ccc;">
-    Real bands. Real sound. No industry BS.
+  <p style="font-size:20px;color:#ccc;">
+    Got something real? Send it.
   </p>
 
-  <p style="color:#888;">
-    All signal. No noise.
+  <p style="font-size:16px;color:#888;">
+    We don’t promote garbage. If it’s good, it gets heard.
   </p>
+
+  <!-- 🔥 IMPORTANT RULE -->
+  <div class="note">
+    Want radio play? Upload your MP3.<br>
+    Videos are for discovery only.
+  </div>
 </div>
 
 <!-- FORM -->
-<div style="max-width:600px;margin:auto;padding:30px;background:#111;border-radius:8px;text-align:center;">
+<div style="padding:30px;">
 
   <form action="https://formspree.io/f/xbdqrwon" method="POST">
 
-    <input type="text" name="band" placeholder="Band Name" required
-      style="width:90%;padding:10px;margin:10px;border:none;border-radius:5px;"><br>
+    <input type="text" name="band" placeholder="Band Name" required><br>
 
-    <input type="text" name="location" placeholder="City, State" required
-      style="width:90%;padding:10px;margin:10px;border:none;border-radius:5px;"><br>
+    <input type="text" name="location" placeholder="City / State"><br>
 
-    <input type="text" name="genre" placeholder="Genre (Rock, Indie, Punk, etc.)" required
-      style="width:90%;padding:10px;margin:10px;border:none;border-radius:5px;"><br>
+    <!-- 🔥 SPLIT INPUTS -->
+    <input type="url" name="mp3" placeholder="MP3 Link (for radio)"><br>
 
-    <textarea name="bio" placeholder="Short Bio (2–3 sentences)" required
-      style="width:90%;height:100px;padding:10px;margin:10px;border:none;border-radius:5px;"></textarea><br>
+    <input type="url" name="video" placeholder="YouTube Link (optional)"><br>
 
-    <input type="url" name="music" placeholder="Music Link (Bandcamp, Spotify, YouTube)" required
-      style="width:90%;padding:10px;margin:10px;border:none;border-radius:5px;"><br>
+    <input type="text" name="image" placeholder="Band image link"><br>
 
-    <input type="url" name="image" placeholder="Image or Logo URL (Bandcamp, IG, Dropbox)" required
-      style="width:90%;padding:10px;margin:10px;border:none;border-radius:5px;"><br>
+    <input type="text" name="logo" placeholder="Band logo (optional)"><br>
 
-    <!-- PERMISSION (THIS IS HUGE) -->
-    <p style="color:#888;font-size:14px;margin-top:15px;">
-      By submitting, you confirm you have permission to share this content and allow Cracker Swamp to feature it.
-    </p>
+    <textarea name="press" placeholder="Short bio / press info"></textarea><br>
 
-    <button type="submit"
-      style="margin-top:15px;padding:15px 30px;background:#cc0000;color:white;border:none;border-radius:5px;font-size:16px;">
-      Submit
-    </button>
+    <!-- DISCLAIMER -->
+    <div class="note">
+      By submitting, you confirm you own or have permission to share all content and grant Cracker Swamp the right to feature it.
+    </div>
+
+    <button type="submit">Send It</button>
 
   </form>
 

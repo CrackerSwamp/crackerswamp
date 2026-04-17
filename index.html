@@ -2,171 +2,171 @@
 <html>
 <head>
   <title>Cracker Swamp</title>
-</head>
+  <style>
+    body {
+      background:#0b0b0b;
+      color:white;
+      font-family:Arial;
+      margin:0;
+      text-align:center;
+    }
 
-<body style="background:#0b0b0b;color:white;font-family:Arial;margin:0;">
+    /* NAV */
+    .nav {
+      background:#0b0b0b;
+      border-bottom:1px solid #222;
+      padding:10px;
+    }
 
-<!-- NAV -->
-<div style="background:#0b0b0b;border-bottom:1px solid #222;padding:12px;text-align:center;">
-  <div style="font-size:20px;font-weight:bold;margin-bottom:10px;">Cracker Swamp</div>
+    .nav img {
+      height:195px; /* 🔥 UPDATED */
+      max-width:90%;
+      margin-bottom:10px;
+    }
 
-  <div style="line-height:2;">
-    <a href="index.html" style="color:white;margin:0 10px;">Home</a>
-    <a href="scenes.html" style="color:white;margin:0 10px;">Scenes</a>
-    <a href="bands.html" style="color:white;margin:0 10px;">Bands</a>
-    <a href="radio.html" style="color:white;margin:0 10px;">Radio</a>
-    <a href="store.html" style="color:white;margin:0 10px;">Store</a>
+    .nav a {
+      color:white;
+      margin:0 10px;
+      text-decoration:none;
+    }
 
-    <a href="submit.html" style="
+    .submit-btn {
       padding:6px 12px;
       background:#cc0000;
       border-radius:5px;
       color:white;
       margin-left:10px;
-      text-decoration:none;
-    ">
-      Submit
-    </a>
-  </div>
-</div>
+    }
 
-<!-- HERO -->
-<div style="padding:100px 20px;text-align:center;">
-  <h1 style="font-size:60px;margin-bottom:10px;">Cracker Swamp</h1>
+    .header {
+      padding:20px 20px;
+      border-bottom:1px solid #222;
+    }
 
-  <p style="font-size:22px;color:#ccc;">
-    Real bands. Real sound. No industry BS.
-  </p>
+    .header h1 {
+      font-size:42px;
+      margin:0;
+    }
 
-  <p style="color:#888;margin-top:10px;">
-    All signal. No noise.
-  </p>
+    .header p {
+      color:#777;
+      margin-top:10px;
+    }
 
-  <div style="margin-top:40px;">
-    <a href="submit.html" style="
-      display:inline-block;
-      padding:15px 30px;
-      background:#cc0000;
-      color:white;
-      text-decoration:none;
-      border-radius:5px;
-      margin:10px;
-    ">
-      Submit Your Band
-    </a>
+    .grid {
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      padding:30px;
+    }
 
-    <a href="radio.html" style="
-      display:inline-block;
-      padding:15px 30px;
+    .card {
+      width:260px;
+      background:#1a1a1a;
+      margin:15px;
+      padding:20px;
+      cursor:pointer;
+      transition:0.2s;
+      border-radius:6px;
+    }
+
+    .card:hover {
       background:#222;
-      color:white;
-      text-decoration:none;
-      border-radius:5px;
-      margin:10px;
-    ">
-      Listen Soon
-    </a>
-  </div>
-</div>
+      transform:scale(1.03);
+    }
 
-<!-- QUICK NAV SECTION -->
-<div style="max-width:900px;margin:auto;padding:40px;text-align:center;">
+    .state {
+      font-size:26px;
+      margin-bottom:10px;
+    }
 
-  <h2>Explore the Swamp</h2>
+    .desc {
+      color:#888;
+      font-size:14px;
+    }
 
-  <div style="display:flex;flex-wrap:wrap;justify-content:center;margin-top:30px;">
-
-    <a href="scenes.html" style="
-      display:block;
-      width:200px;
-      margin:10px;
+    .footer {
+      margin-top:40px;
       padding:20px;
-      background:#111;
-      border-radius:8px;
-      text-decoration:none;
-      color:white;
-    ">
-      <h3>Scenes</h3>
-      <p style="color:#aaa;">Browse by state</p>
-    </a>
+      border-top:1px solid #222;
+      color:#666;
+      font-size:13px;
+    }
+  </style>
+</head>
+<body>
 
-    <a href="bands.html" style="
-      display:block;
-      width:200px;
-      margin:10px;
-      padding:20px;
-      background:#111;
-      border-radius:8px;
-      text-decoration:none;
-      color:white;
-    ">
-      <h3>Bands</h3>
-      <p style="color:#aaa;">Discover artists</p>
-    </a>
+<!-- 🚚 NAV -->
+<div class="nav">
 
-    <a href="radio.html" style="
-      display:block;
-      width:200px;
-      margin:10px;
-      padding:20px;
-      background:#111;
-      border-radius:8px;
-      text-decoration:none;
-      color:white;
-    ">
-      <h3>Radio</h3>
-      <p style="color:#aaa;">Streaming soon</p>
-    </a>
+  <img src="CRACKERSWAMP.png">
 
+  <div>
+    <a href="index.html">Home</a>
+    <a href="radio.html">Radio</a>
+    <a href="bands.html">Bands</a>
+    <a href="store.html">Merch</a>
+    <a href="submit.html" class="submit-btn">Submit</a>
   </div>
 
 </div>
 
-<!-- FEATURED BANDS -->
-<div style="max-width:900px;margin:auto;padding:40px;">
-
-  <h2 style="text-align:center;">Featured Bands</h2>
-
-  <div style="margin-top:30px;">
-
-    <div style="background:#111;padding:20px;margin-bottom:15px;border-radius:8px;">
-      <h3>Band 1</h3>
-      <p style="color:#aaa;">Athens, GA — Rock</p>
-    </div>
-
-    <div style="background:#111;padding:20px;margin-bottom:15px;border-radius:8px;">
-      <h3>Band 2</h3>
-      <p style="color:#aaa;">Atlanta, GA — Indie</p>
-    </div>
-
-    <div style="background:#111;padding:20px;margin-bottom:15px;border-radius:8px;">
-      <h3>Band 3</h3>
-      <p style="color:#aaa;">Augusta, GA — Funk / Soul</p>
-    </div>
-
-  </div>
-
+<!-- HEADER -->
+<div class="header">
+  <h1>Southern Music Scene</h1>
+  <p>Real bands. No filler.</p>
 </div>
 
-<!-- CTA -->
-<div style="text-align:center;padding:60px;">
-  <h2>Got a band?</h2>
+<!-- STATE GRID -->
+<div class="grid">
 
-  <p style="color:#aaa;">
-    Submit and get featured across the Swamp.
-  </p>
-
-  <a href="submit.html" style="
-    display:inline-block;
-    padding:15px 30px;
-    background:#cc0000;
-    color:white;
-    text-decoration:none;
-    border-radius:5px;
-    margin-top:20px;
-  ">
-    Submit Your Band
+  <a href="georgia.html">
+    <div class="card">
+      <div class="state">Georgia</div>
+      <div class="desc">Atlanta, Athens, underground heat</div>
+    </div>
   </a>
+
+  <a href="florida.html">
+    <div class="card">
+      <div class="state">Florida</div>
+      <div class="desc">Garage, surf, chaos energy</div>
+    </div>
+  </a>
+
+  <a href="alabama.html">
+    <div class="card">
+      <div class="state">Alabama</div>
+      <div class="desc">Grit, soul, southern rock</div>
+    </div>
+  </a>
+
+  <a href="southcarolina.html">
+    <div class="card">
+      <div class="state">South Carolina</div>
+      <div class="desc">Coastal vibes and backroad bands</div>
+    </div>
+  </a>
+
+  <a href="louisiana.html">
+    <div class="card">
+      <div class="state">Louisiana</div>
+      <div class="desc">Blues, funk, swamp sound</div>
+    </div>
+  </a>
+
+  <a href="mississippi.html">
+    <div class="card">
+      <div class="state">Mississippi</div>
+      <div class="desc">Roots, delta, raw music</div>
+    </div>
+  </a>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  Built for real bands. No filler.
 </div>
 
 </body>

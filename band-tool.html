@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Band Control Panel</title>
+  <style>
+    body {
+      background:#0b0b0b;
+      color:white;
+      font-family:Arial;
+      margin:0;
+      text-align:center;
+    }
+
+    .nav {
+      padding:10px;
+      border-bottom:1px solid #222;
+    }
+
+    .nav img {
+      height:195px;
+    }
+
+    input {
+      width:280px;
+      padding:8px;
+      margin:5px;
+      background:#111;
+      border:1px solid #333;
+      color:white;
+    }
+
+    button {
+      padding:8px 15px;
+      background:#cc0000;
+      color:white;
+      border:none;
+      cursor:pointer;
+      margin:5px;
+    }
+
+    .container {
+      padding:20px;
+    }
+
+    .band {
+      background:#111;
+      margin:10px auto;
+      padding:10px;
+      width:320px;
+      border:1px solid #333;
+    }
+
+    .band img {
+      width:100%;
+    }
+
+    textarea {
+      width:90%;
+      height:200px;
+      background:#111;
+      color:#0f0;
+      border:1px solid #333;
+      padding:10px;
+      margin-top:20px;
+    }
+
+    .note {
+      color:#777;
+      font-size:13px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="nav">
+  <img src="CRACKERSWAMP.png">
+</div>
+
+<div class="container">
+
+<h2>Add Band</h2>
+
+<input id="name" placeholder="Band Name"><br>
+<input id="location" placeholder="City, State"><br>
+<input id="video" placeholder="YouTube Link"><br>
+<input id="mp3" placeholder="MP3 Link"><br>
+
+<button onclick="addBand()">Add Band</button>
+<button onclick="exportData()">Export data.js</button>
+<button onclick="clearAll()">Clear All</button>
+
+<p class="note">Bands are saved in your browser automatically</p>
+
+<div id="bandList"></div>
+
+<textarea id="output" placeholder="Exported data.js appears here..."></textarea>
+
+</div>
+
+<script>
+
+// load saved bands
+let bands = JSON.parse(localStorage.getItem("bandsData")) || [];
+
+function save() {
+  localStorage.setItem("bandsData", JSON.stringify(bands));
+}
+
+// thumbnail
+function getThumb(url) {
+  if (!url.includes("v=")) return "";
+  let id = url.split("v=")[1].split("&")[0];
+  return "https://img.youtube.com/vi/" + id + "/0.jpg";
+}
+
+// add band
+function addBand() {
+  let name = document.getElementById("name").value.trim();
+  let location = document.getElementById("location").value.trim();
+  let video = document.getElementById("video").value.trim();
+  let mp3 = document.getElementById("mp3").value.trim();
+
+  if (!name || !location) {
+    alert("Need name + location");
+    return;
+  }
+
+  bands.push({ name, location, video, mp3 });
+  save();
+  render();
+}
+
+// delete band
+function deleteBand(i) {
+  bands.splice(i,1);
+  save();
+  render();
+}
+
+// render list
+function render() {
+  let container = document.getElementById("bandList");
+  container.innerHTML = "";
+
+  bands.forEach((b,i) => {
+
+    let div = document.createElement("div");
+    div.className = "band";
+
+    let thumb = getThumb(b.video);
+
+    div.innerHTML = `
+      ${thumb ? `<img src="${thumb}">` : ""}
+      <h3>${b.name}</h3>
+      <p>${b.location}</p>
+      <button onclick="deleteBand(${i})">Delete</button>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+// export full data.js
+function exportData() {
+  let code = "const bands = " + JSON.stringify(bands, null, 2) + ";";
+  document.getElementById("output").value = code;
+}
+
+// clear all
+function clearAll() {
+  if (confirm("Delete ALL bands?")) {
+    bands = [];
+    save();
+    render();
+  }
+}
+
+// init
+render();
+
+</script>
+
+</body>
+</html>

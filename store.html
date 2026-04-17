@@ -1,101 +1,163 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Store - Cracker Swamp</title>
-</head>
+  <title>Cracker Swamp Merch</title>
+  <style>
+    body {
+      background:#0b0b0b;
+      color:white;
+      font-family:Arial;
+      margin:0;
+      text-align:center;
+    }
 
-<body style="background:#0b0b0b;color:white;font-family:Arial;margin:0;">
+    /* NAV */
+    .nav {
+      background:#0b0b0b;
+      border-bottom:1px solid #222;
+      padding:10px;
+    }
 
-<!-- NAV -->
-<div style="background:#0b0b0b;border-bottom:1px solid #222;padding:12px;text-align:center;">
-  <div style="font-size:20px;font-weight:bold;margin-bottom:10px;">Cracker Swamp</div>
+    .nav img {
+      height:195px;
+      max-width:90%;
+      margin-bottom:10px;
+    }
 
-  <div style="line-height:2;">
-    <a href="index.html" style="color:white;margin:0 10px;">Home</a>
-    <a href="scenes.html" style="color:white;margin:0 10px;">Scenes</a>
-    <a href="bands.html" style="color:white;margin:0 10px;">Bands</a>
-    <a href="radio.html" style="color:white;margin:0 10px;">Radio</a>
-    <a href="store.html" style="color:white;margin:0 10px;">Store</a>
+    .nav a {
+      color:white;
+      margin:0 10px;
+      text-decoration:none;
+    }
 
-    <a href="submit.html" style="
+    .submit-btn {
       padding:6px 12px;
       background:#cc0000;
       border-radius:5px;
       color:white;
       margin-left:10px;
-      text-decoration:none;
-    ">
-      Submit
-    </a>
-  </div>
-</div>
+    }
 
-<!-- HEADER -->
-<div style="padding:80px 20px;text-align:center;">
-  <h1 style="font-size:50px;">Cracker Swamp Store</h1>
+    .header {
+      padding:30px;
+    }
 
-  <p style="color:#ccc;">
-    Support real Southern music.
-  </p>
+    .header h1 {
+      font-size:40px;
+      margin-bottom:10px;
+    }
 
-  <p style="color:#888;">
-    All signal. No noise.
-  </p>
-</div>
+    .header p {
+      color:#777;
+    }
 
-<!-- PRODUCTS -->
-<div style="max-width:900px;margin:auto;padding:40px;">
+    .grid {
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      padding:20px;
+    }
 
-  <!-- DIGITAL COMP -->
-  <div style="background:#111;padding:30px;margin-bottom:30px;border-radius:8px;text-align:center;">
-    
-    <h2>Cracker Swamp Vol. 1</h2>
+    .product {
+      width:260px;
+      background:#111;
+      margin:15px;
+      padding:15px;
+      border-radius:6px;
+      transition:0.2s;
+    }
 
-    <p style="color:#aaa;">
-      A curated collection of real Southern bands.
-      <br><br>
-      Be early. Support independent music.
-    </p>
+    .product:hover {
+      background:#1a1a1a;
+      transform:scale(1.03);
+    }
 
-    <a href="#" style="
+    .product img {
+      width:100%;
+      border-radius:5px;
+    }
+
+    .product h3 {
+      margin:10px 0;
+    }
+
+    .buy-btn {
       display:inline-block;
-      margin-top:20px;
-      padding:15px 30px;
+      margin-top:10px;
+      padding:10px 15px;
       background:#cc0000;
       color:white;
       text-decoration:none;
       border-radius:5px;
-      font-size:18px;
-    ">
-      Buy / Download
-    </a>
+    }
 
-  </div>
+    .buy-btn:hover {
+      background:#e60000;
+    }
 
-  <!-- SUPPORT BUTTON -->
-  <div style="background:#111;padding:30px;border-radius:8px;text-align:center;">
-
-    <h2>Support the Swamp</h2>
-
-    <p style="color:#aaa;">
-      Help keep real music alive and growing.
-    </p>
-
-    <a href="#" style="
-      display:inline-block;
+    .note {
+      color:#777;
+      font-size:14px;
       margin-top:20px;
-      padding:15px 30px;
-      background:#222;
-      color:white;
-      text-decoration:none;
-      border-radius:5px;
-      font-size:18px;
-    ">
-      Buy Me a Beer 🍺
-    </a>
+    }
+  </style>
+</head>
+<body>
 
+<!-- 🚚 NAV -->
+<div class="nav">
+  <img src="CRACKERSWAMP.png">
+
+  <div>
+    <a href="index.html">Home</a>
+    <a href="radio.html">Radio</a>
+    <a href="bands.html">Bands</a>
+    <a href="store.html">Merch</a>
+    <a href="submit.html" class="submit-btn">Submit</a>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>Cracker Swamp Merch</h1>
+  <p>Wear the swamp.</p>
+</div>
+
+<!-- PRODUCTS -->
+<div class="grid">
+
+  <!-- PRODUCT 1 -->
+  <div class="product">
+    <img src="shirt1.jpg">
+    <h3>Cracker Swamp Classic Tee</h3>
+    <a href="https://www.amazon.com/Cracker-Swamp-Space-Truck-Logo-T-Shirt/dp/B08NVTJ818?dib=eyJ2IjoiMSJ9.M92t1epyrFEfug2RrL-FgnCY8ZVARAp2c3nLCG8I5S0zd83uO8EsdICB6tLsPCc58I32dKlkDBEePHV5QwGS3xZuyQXPMligOOJk6zRSf3gsaT6UDQfMMRoIHchTtbGjPnErGJqxWOm9lSOFlPBwzdInyQjouTZGJBoyTOlsSiwmifWHBacxlJx_Fgrz6nfQfl8gFXo5HxEnro2uBpaP5qFkKeK_Fz17eQEx56KkggDWDQGNYhhBqp21gAyN2cUH5wtfcl38uWjOtjIngOUTVWXbpswKLbd36fZPHQ4i8_U.lho3wLfJBzj7yGFCEEm3Jq4sJaivOnTTKQRar6d-64E&dib_tag=se&qid=1776380781&refinements=p_4%3ACracker-Swamp&s=apparel&sr=1-31&customId=B0752XJYNL&customizationToken=MC_Assembly_1%23B0752XJYNL&th=1&psc=1&linkCode=ll2&tag=itsoamazgad0e-20&linkId=8b0b9c08667365506b9c127979a4ee9f&language=en_US&ref_=as_li_ss_tl" target="_blank" class="buy-btn">
+      Get It
+    </a>
   </div>
 
+  <!-- PRODUCT 2 -->
+  <div class="product">
+    <img src="shirt2.jpg">
+    <h3>Swamp Truck Logo Shirt</h3>
+    <a href="https://www.amazon.com/Cracker-Swamp-Alien-Abduction-Logo-T-Shirt/dp/B08P39G3TG?dib=eyJ2IjoiMSJ9.M92t1epyrFEfug2RrL-FgnCY8ZVARAp2c3nLCG8I5S0zd83uO8EsdICB6tLsPCc58I32dKlkDBEePHV5QwGS3xZuyQXPMligOOJk6zRSf3gsaT6UDQfMMRoIHchTtbGjPnErGJqxWOm9lSOFlPBwzdInyQjouTZGJBoyTOlsSiwmifWHBacxlJx_Fgrz6nfQfl8gFXo5HxEnro2uBpaP5qFkKeK_Fz17eQEx56KkggDWDQGNYhhBqp21gAyN2cUH5wtfcl38uWjOtjIngOUTVWXbpswKLbd36fZPHQ4i8_U.lho3wLfJBzj7yGFCEEm3Jq4sJaivOnTTKQRar6d-64E&dib_tag=se&qid=1776380781&refinements=p_4%3ACracker-Swamp&s=apparel&sr=1-29&customId=B0752XJYNL&customizationToken=MC_Assembly_1%23B0752XJYNL&th=1&psc=1&linkCode=ll2&tag=itsoamazgad0e-20&linkId=910893d5cb35cda41d2a9c178a7a18f7&language=en_US&ref_=as_li_ss_tl" target="_blank" class="buy-btn">
+      Get It
+    </a>
+  </div>
+
+  <!-- PRODUCT 3 -->
+  <div class="product">
+    <img src="shirt3.jpg">
+    <h3>Cracker Swamp Shirt</h3>
+    <a href="https://www.amazon.com/Cracker-Swamp-Logo-Swamp-Thing-T-Shirt/dp/B08NL5V28Q?dib=eyJ2IjoiMSJ9.M92t1epyrFEfug2RrL-FgnCY8ZVARAp2c3nLCG8I5S0zd83uO8EsdICB6tLsPCc58I32dKlkDBEePHV5QwGS3xZuyQXPMligOOJk6zRSf3gsaT6UDQfMMRoIHchTtbGjPnErGJqxWOm9lSOFlPBwzdInyQjouTZGJBoyTOlsSiwmifWHBacxlJx_Fgrz6nfQfl8gFXo5HxEnro2uBpaP5qFkKeK_Fz17eQEx56KkggDWDQGNYhhBqp21gAyN2cUH5wtfcl38uWjOtjIngOUTVWXbpswKLbd36fZPHQ4i8_U.lho3wLfJBzj7yGFCEEm3Jq4sJaivOnTTKQRar6d-64E&dib_tag=se&qid=1776380781&refinements=p_4%3ACracker-Swamp&s=apparel&sr=1-38&customId=B0752XJYNL&customizationToken=MC_Assembly_1%23B0752XJYNL&th=1&psc=1&linkCode=ll2&tag=itsoamazgad0e-20&linkId=621f426f91d5ca0778e0c81c95d1a828&language=en_US&ref_=as_li_ss_tl" target="_blank" class="buy-btn">
+      Get It
+    </a>
+  </div>
+
+</div>
+
+<!-- FOOTER NOTE -->
+<div class="note">
+  Official Cracker Swamp gear. More coming soon.
 </div>
 
 </body>

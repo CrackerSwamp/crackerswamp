@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Radio - Cracker Swamp</title>
+</head>
+
+<body style="background:#0b0b0b;color:white;font-family:Arial;margin:0;">
+
+<!-- NAV -->
+<div style="background:#0b0b0b;border-bottom:1px solid #222;padding:12px;text-align:center;">
+  <div style="font-size:20px;font-weight:bold;margin-bottom:10px;">Cracker Swamp</div>
+
+  <div>
+    <a href="index.html" style="color:white;margin:0 10px;">Home</a>
+    <a href="scenes.html" style="color:white;margin:0 10px;">Scenes</a>
+    <a href="bands.html" style="color:white;margin:0 10px;">Bands</a>
+    <a href="radio.html" style="color:white;margin:0 10px;">Radio</a>
+    <a href="store.html" style="color:white;margin:0 10px;">Store</a>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div style="padding:60px 20px;text-align:center;">
+  <h1>Cracker Swamp Radio</h1>
+  <p style="color:#aaa;">Real bands. No filler.</p>
+</div>
+
+<!-- PLAYER -->
+<div style="max-width:700px;margin:auto;padding:20px;background:#111;border-radius:8px;text-align:center;">
+
+  <h2 id="now">Nothing Playing</h2>
+
+  <audio id="audio" style="width:100%;" controls></audio>
+
+  <div style="margin-top:15px;">
+    <button onclick="playRandom()">Shuffle</button>
+    <button onclick="next()">Next</button>
+  </div>
+
+</div>
+
+<script>
+const tracks = [
+  { name: "Band 1 - Song A", file: "music/song1.mp3" },
+  { name: "Band 2 - Song B", file: "music/song2.mp3" }
+];
+
+let current = 0;
+const audio = document.getElementById("audio");
+const now = document.getElementById("now");
+
+function playTrack(i) {
+  current = i;
+  audio.src = tracks[i].file;
+  audio.play();
+  now.innerText = tracks[i].name;
+}
+
+function next() {
+  current++;
+  if (current >= tracks.length) current = 0;
+  playTrack(current);
+}
+
+function playRandom() {
+  const r = Math.floor(Math.random() * tracks.length);
+  playTrack(r);
+}
+
+audio.onended = next;
+</script>
+
+</body>
+</html>

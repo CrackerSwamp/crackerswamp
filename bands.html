@@ -34,15 +34,6 @@
     .card img {
       width:100%;
     }
-
-    button {
-      margin:5px;
-      padding:10px 15px;
-      background:#222;
-      color:#fff;
-      border:none;
-      cursor:pointer;
-    }
   </style>
 </head>
 <body>
@@ -55,7 +46,7 @@
 
 <div id="bands"></div>
 
-<!-- 🔥 YouTube API -->
+<!-- YouTube API -->
 <script src="https://www.youtube.com/iframe_api"></script>
 
 <script type="module">
@@ -84,7 +75,7 @@ function extractID(url) {
   return url.split("v=")[1].split("&")[0];
 }
 
-// 🔥 PLAYER WITH AUTO-SKIP
+// PLAYER WITH FAST SKIP + BLACK SCREEN FIX
 function playVideo(index) {
 
   let band = bandList[index];
@@ -132,18 +123,21 @@ function playVideo(index) {
 
       onStateChange: (e) => {
 
-        if (e.data === 1 || e.data === 3) {
+        // ONLY show if truly playing
+        if (e.data === 1) {
           started = true;
           playerDiv.style.display = "block";
           loading.style.display = "none";
         }
 
+        // ended → next
         if (e.data === 0) {
           overlay.remove();
           nextVideo(index);
         }
       },
 
+      // error → skip immediately
       onError: () => {
         overlay.remove();
         nextVideo(index);
@@ -151,12 +145,13 @@ function playVideo(index) {
     }
   });
 
+  // FAST SKIP if not really playing
   setTimeout(() => {
     if (!started) {
       overlay.remove();
       nextVideo(index);
     }
-  }, 4000);
+  }, 2500);
 }
 
 // NEXT VIDEO

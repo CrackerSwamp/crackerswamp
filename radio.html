@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Cracker Swamp Radio</title>
+
   <style>
     body {
       background:#0b0b0b;
@@ -11,156 +12,134 @@
       text-align:center;
     }
 
-    /* NAV */
     .nav {
-      background:#0b0b0b;
       border-bottom:1px solid #222;
       padding:10px;
     }
 
     .nav img {
       height:195px;
-      max-width:90%;
-      margin-bottom:10px;
     }
 
-    .nav a {
-      color:white;
-      margin:0 10px;
-      text-decoration:none;
+    .player {
+      margin-top:50px;
     }
 
-    .submit-btn {
-      padding:6px 12px;
-      background:#cc0000;
-      border-radius:5px;
-      color:white;
-      margin-left:10px;
-    }
-
-    .header {
-      padding:30px;
-    }
-
-    .player-box {
-      max-width:600px;
-      margin:20px auto;
-      background:#111;
-      padding:20px;
-      border-radius:6px;
-    }
-
-    audio {
-      width:100%;
-      margin-top:10px;
-    }
-
-    .controls button {
+    button {
+      padding:10px 20px;
       margin:5px;
-      padding:10px 15px;
       background:#222;
       color:white;
       border:none;
       cursor:pointer;
     }
 
-    .controls button:hover {
-      background:#333;
-    }
-
-    .now-playing {
-      font-size:18px;
-      margin-top:10px;
+    #nowPlaying {
+      margin-top:20px;
+      font-size:20px;
       color:#ccc;
     }
   </style>
 </head>
 <body>
 
-<!-- 🚚 NAV -->
 <div class="nav">
   <img src="CRACKERSWAMP.png">
-
-  <div>
-    <a href="index.html">Home</a>
-    <a href="radio.html">Radio</a>
-    <a href="bands.html">Bands</a>
-    <a href="store.html">Merch</a>
-    <a href="submit.html" class="submit-btn">Submit</a>
-  </div>
 </div>
 
-<!-- HEADER -->
-<div class="header">
-  <h1>Cracker Swamp Radio</h1>
-  <p style="color:#777;">Real bands. No filler.</p>
-</div>
+<h1>Cracker Swamp Radio</h1>
+<p>Real bands. No filler.</p>
 
-<!-- PLAYER -->
-<div class="player-box">
-
-  <h2>Now Playing</h2>
-  <div id="nowPlaying" class="now-playing">Nothing yet</div>
+<div class="player">
 
   <audio id="audioPlayer" controls></audio>
 
-  <div class="controls">
-    <button onclick="prevSong()">⏮ Prev</button>
-    <button onclick="nextSong()">⏭ Next</button>
+  <div id="nowPlaying">Loading...</div>
+
+  <div>
+    <button onclick="prev()">Prev</button>
+    <button onclick="next()">Next</button>
   </div>
 
 </div>
 
-<script>
+<script type="module">
 
-// 🎵 GET DATA
-let bands = JSON.parse(localStorage.getItem("bands")) || [];
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
-// only keep ones with MP3
-let playlist = bands.filter(b => b.mp3);
+const firebaseConfig = {
+  apiKey: "AIzaSyBPq01s5eS_GQ_ECkfZsoT5Oo977gPpMS0",
+  authDomain: "cracker-swamp.firebaseapp.com",
+  projectId: "cracker-swamp",
+  storageBucket: "cracker-swamp.firebasestorage.app",
+  messagingSenderId: "217552202123",
+  appId: "1:217552202123:web:ed04bd70294f3713fa678e"
+};
 
-// fallback demo (so it’s not empty)
-if (playlist.length === 0) {
-  playlist = [
-    { name: "Demo Track", mp3: "demo.mp3" }
-  ];
-}
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
+let playlist = [];
 let current = 0;
 
-const player = document.getElementById("audioPlayer");
-const nowPlaying = document.getElementById("nowPlaying");
+const audio = document.getElementById("audioPlayer");
+const now = document.getElementById("nowPlaying");
 
-// ▶ PLAY SONG
-function playSong(index) {
+// LOAD MP3s
+async function loadSongs() {
 
-  let track = playlist[index];
+  const snapshot = await getDocs(collection(db, "bands"));
 
-  player.src = track.mp3;
-  player.play();
+  playlist = [];
 
-  nowPlaying.innerText = track.name || "Unknown Band";
+  snapshot.forEach((docItem) => {
+    let b = docItem.data();
+
+    if (b.mp3) {
+      playlist.push(b);
+    }
+  });
+
+  if (playlist.length > 0) {
+    play(0);
+  } else {
+    now.innerText = "No songs yet";
+  }
 }
 
-// ⏭ NEXT
-function nextSong() {
-  current++;
-  if (current >= playlist.length) current = 0;
-  playSong(current);
+// PLAY
+function play(index) {
+
+  current = index;
+  let song = playlist[index];
+
+  audio.src = song.mp3;
+  audio.play();
+
+  now.innerText = song.name + " — " + (song.location || "");
 }
 
-// ⏮ PREV
-function prevSong() {
-  current--;
-  if (current < 0) current = playlist.length - 1;
-  playSong(current);
-}
+// NEXT
+window.next = function() {
+  let n = current + 1;
+  if (n >= playlist.length) n = 0;
+  play(n);
+};
 
-// 🔁 AUTO NEXT
-player.addEventListener("ended", nextSong);
+// PREV
+window.prev = function() {
+  let p = current - 1;
+  if (p < 0) p = playlist.length - 1;
+  play(p);
+};
 
-// ▶ START FIRST SONG
-playSong(current);
+// AUTO NEXT
+audio.addEventListener("ended", () => {
+  next();
+});
+
+loadSongs();
 
 </script>
 

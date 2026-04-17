@@ -4,7 +4,7 @@
   <title>Radio</title>
 
   <style>
-    body{
+    body {
       background:#0b0b0b;
       margin:0;
       font-family:Arial;
@@ -12,8 +12,8 @@
       text-align:center;
     }
 
-    .radio{
-      width:760px; /* narrower */
+    .radio {
+      width:760px;
       margin:40px auto;
       padding:18px;
       background:linear-gradient(135deg,#5b3f2b,#3a2518);
@@ -23,93 +23,76 @@
       position:relative;
     }
 
-    .radio:before{
-      content:"";
-      position:absolute;
-      inset:6px;
-      border:2px dotted #8b5a2b;
-      pointer-events:none;
-      border-radius:8px;
-    }
-
-    .top{
+    .top {
       display:flex;
-      align-items:center;
       justify-content:space-between;
+      align-items:center;
     }
 
     /* SPEAKERS */
-    .speaker{
+    .speaker {
       width:180px;
       height:180px;
       border-radius:50%;
-      position:relative;
       background:radial-gradient(#444,#000);
       box-shadow:inset 0 0 35px #000;
       transition:transform 0.1s linear;
     }
 
-    .speaker.vibe{
-      animation: pulse 0.25s infinite alternate;
+    .speaker.vibe {
+      animation:pulse 0.25s infinite alternate;
     }
 
-    @keyframes pulse{
-      from{ transform:scale(1); }
-      to{ transform:scale(1.05); }
+    @keyframes pulse {
+      from { transform:scale(1); }
+      to { transform:scale(1.05); }
     }
 
-    .speaker:before{
-      content:"";
-      position:absolute;
-      inset:-8px;
-      border:3px dotted #c8a96a;
-      border-radius:50%;
-    }
-
-    .speaker:after{
-      content:"";
-      position:absolute;
-      inset:8px;
-      border:2px dotted #6e5130;
-      border-radius:50%;
-    }
-
-    /* SCREEN (smaller now) */
-    .screenWrap{
+    /* SCREEN WRAP */
+    .screenWrap {
       width:38%;
       position:relative;
+      padding:10px;
     }
 
-    .screenBead1{ border:3px solid #d4af37; inset:0; position:absolute; }
-    .screenBead2{ border:2px solid #8b6a2b; inset:4px; position:absolute; }
-    .screenBead3{ border:1px solid #3a2a12; inset:8px; position:absolute; }
+    /* 🔥 TRIPLE BEAD (depth restored) */
+    .screenBead1,
+    .screenBead2,
+    .screenBead3 {
+      position:absolute;
+      border-radius:4px;
+      pointer-events:none;
+    }
 
-    .screen{
+    .screenBead1 { inset:0; border:3px solid #d4af37; }
+    .screenBead2 { inset:4px; border:2px solid #8b6a2b; }
+    .screenBead3 { inset:8px; border:1px solid #2a1a10; }
+
+    .screen {
       position:relative;
       background:#000;
       color:#00ff88;
       padding:6px;
       font-family:Courier New;
-      white-space:nowrap;
       overflow:hidden;
+      white-space:nowrap;
     }
 
-    .scroll{
+    .scroll {
       display:inline-block;
-      animation:scroll 12s linear infinite;
+      animation:scroll 10s linear infinite;
     }
 
-    @keyframes scroll{
-      from{ transform:translateX(100%); }
-      to{ transform:translateX(-100%); }
+    @keyframes scroll {
+      from { transform:translateX(100%); }
+      to { transform:translateX(-100%); }
     }
 
-    /* CONTROLS */
-    .controls{
-      margin-top:20px;
+    .controls {
+      margin-top:15px;
     }
 
-    button{
+    button {
       width:42px;
       height:34px;
       margin:4px;
@@ -119,17 +102,13 @@
       cursor:pointer;
     }
 
-    button:hover{
-      background:#333;
-    }
-
-    .knobs{
+    .knobs {
       display:flex;
       justify-content:space-around;
       margin-top:15px;
     }
 
-    .knob{
+    .knob {
       width:80px;
       height:80px;
       border-radius:50%;
@@ -138,7 +117,7 @@
       box-shadow:inset 0 0 12px #000;
     }
 
-    .indicator{
+    .indicator {
       width:4px;
       height:28px;
       background:#d4af37;
@@ -155,7 +134,6 @@
 <div class="radio">
 
   <div class="top">
-
     <div class="speaker" id="spkL"></div>
 
     <div class="screenWrap">
@@ -169,16 +147,15 @@
     </div>
 
     <div class="speaker" id="spkR"></div>
-
   </div>
 
   <div class="controls">
-    <button onclick="prev()">⏮</button>
-    <button onclick="play()">▶</button>
-    <button onclick="pause()">⏸</button>
-    <button onclick="next()">⏭</button>
-    <button onclick="toggleLoop()">🔁</button>
-    <button onclick="shuffleToggle()">🔀</button>
+    <button onclick="btn('Prev'); prev()">⏮</button>
+    <button onclick="btn('Play'); play()">▶</button>
+    <button onclick="btn('Pause'); pause()">⏸</button>
+    <button onclick="btn('Next'); next()">⏭</button>
+    <button onclick="btn('Loop'); toggleLoop()">🔁</button>
+    <button onclick="btn('Random'); shuffleToggle()">🔀</button>
   </div>
 
   <div class="knobs">
@@ -186,7 +163,7 @@
       <div class="indicator"></div>
     </div>
 
-    <div class="knob" onclick="next()">
+    <div class="knob" onclick="tune()">
       <div class="indicator"></div>
     </div>
   </div>
@@ -214,10 +191,28 @@ let current = 0;
 let randomMode = false;
 let loop = false;
 
+let genres = ["Rock","Indie","Punk","Blues"];
+let genreIndex = 0;
+let tuningMode = "genre";
+
 const audio = document.getElementById("audioPlayer");
 const scroll = document.getElementById("scrollText");
 const spkL = document.getElementById("spkL");
 const spkR = document.getElementById("spkR");
+
+let timeout;
+
+// display helper
+function showTemp(text){
+  clearTimeout(timeout);
+  scroll.innerText = text;
+  timeout = setTimeout(showNowPlaying,1500);
+}
+
+function showNowPlaying(){
+  let song = playlist[current];
+  scroll.innerText = song.name + " - " + (song.location || "");
+}
 
 async function loadSongs(){
   const snap = await getDocs(collection(db,"bands"));
@@ -230,14 +225,16 @@ async function loadSongs(){
 
 function loadTrack(i){
   current = i;
-  let song = playlist[i];
-  audio.src = song.mp3;
-
-  scroll.innerText =
-    song.name + " - " + (song.location || "") +
-    " | ▶ Play ⏸ Pause ⏮ ⏭ 🔁 Loop 🔀 Random";
+  audio.src = playlist[i].mp3;
+  showNowPlaying();
 }
 
+// BUTTON FLASH
+window.btn = function(name){
+  showTemp(name.toUpperCase());
+};
+
+// PLAYBACK
 window.play = ()=>{
   audio.play();
   spkL.classList.add("vibe");
@@ -250,14 +247,14 @@ window.pause = ()=>{
   spkR.classList.remove("vibe");
 };
 
-window.next = function(){
+window.next = ()=>{
   current = randomMode ? Math.floor(Math.random()*playlist.length)
                        : (current+1)%playlist.length;
   loadTrack(current);
   play();
 };
 
-window.prev = function(){
+window.prev = ()=>{
   current = (current-1+playlist.length)%playlist.length;
   loadTrack(current);
   play();
@@ -270,8 +267,24 @@ audio.addEventListener("ended",()=>{
   loop ? play() : next();
 });
 
+// VOLUME
 window.volumeUp = ()=>{
   audio.volume = Math.min(1, audio.volume + 0.1);
+  showTemp("VOL " + Math.round(audio.volume*100));
+};
+
+// TUNING LOGIC
+window.tune = ()=>{
+  if(tuningMode === "genre"){
+    genreIndex = (genreIndex+1)%genres.length;
+    showTemp("GENRE: " + genres[genreIndex]);
+
+    // switch to band mode after pause
+    setTimeout(()=> tuningMode="band",1500);
+  } else {
+    next();
+    showTemp("TUNE");
+  }
 };
 
 loadSongs();

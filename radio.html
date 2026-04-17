@@ -13,9 +13,9 @@
     }
 
     .radio{
-      width:900px;
+      width:760px; /* narrower */
       margin:40px auto;
-      padding:20px 20px 25px;
+      padding:18px;
       background:linear-gradient(135deg,#5b3f2b,#3a2518);
       border:10px solid #2a1a10;
       border-radius:12px;
@@ -23,7 +23,6 @@
       position:relative;
     }
 
-    /* subtle inner bead on cabinet */
     .radio:before{
       content:"";
       position:absolute;
@@ -33,77 +32,71 @@
       border-radius:8px;
     }
 
-    /* --- TOP ROW --- */
     .top{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      margin-top:5px;
     }
 
-    /* SPEAKERS (2x + beaded rings) */
+    /* SPEAKERS */
     .speaker{
-      width:190px;
-      height:190px;
+      width:180px;
+      height:180px;
       border-radius:50%;
       position:relative;
       background:radial-gradient(#444,#000);
       box-shadow:inset 0 0 35px #000;
+      transition:transform 0.1s linear;
     }
 
-    .speaker:before,
+    .speaker.vibe{
+      animation: pulse 0.25s infinite alternate;
+    }
+
+    @keyframes pulse{
+      from{ transform:scale(1); }
+      to{ transform:scale(1.05); }
+    }
+
+    .speaker:before{
+      content:"";
+      position:absolute;
+      inset:-8px;
+      border:3px dotted #c8a96a;
+      border-radius:50%;
+    }
+
     .speaker:after{
       content:"";
       position:absolute;
-      border-radius:50%;
-      pointer-events:none;
-    }
-
-    /* outer bead */
-    .speaker:before{
-      inset:-8px;
-      border:3px dotted #c8a96a;
-    }
-
-    /* inner bead */
-    .speaker:after{
       inset:8px;
       border:2px dotted #6e5130;
+      border-radius:50%;
     }
 
-    /* --- SCREEN (half width + triple bead) --- */
+    /* SCREEN (smaller now) */
     .screenWrap{
-      width:50%;
+      width:38%;
       position:relative;
-      padding:10px;
     }
 
-    .screenBead1,
-    .screenBead2,
-    .screenBead3{
-      position:absolute;
-      inset:0;
-      border-radius:4px;
-      pointer-events:none;
-    }
-
-    .screenBead1{ border:3px solid #d4af37; }
-    .screenBead2{ inset:4px; border:2px solid #8b6a2b; }
-    .screenBead3{ inset:8px; border:1px solid #3a2a12; }
+    .screenBead1{ border:3px solid #d4af37; inset:0; position:absolute; }
+    .screenBead2{ border:2px solid #8b6a2b; inset:4px; position:absolute; }
+    .screenBead3{ border:1px solid #3a2a12; inset:8px; position:absolute; }
 
     .screen{
       position:relative;
       background:#000;
       color:#00ff88;
-      padding:8px 6px;
-      font-family:"Courier New", monospace;
+      padding:6px;
+      font-family:Courier New;
       white-space:nowrap;
       overflow:hidden;
     }
 
     .scroll{
       display:inline-block;
-      animation:scroll 10s linear infinite;
+      animation:scroll 12s linear infinite;
     }
 
     @keyframes scroll{
@@ -111,70 +104,48 @@
       to{ transform:translateX(-100%); }
     }
 
-    /* --- CONTROLS ROW --- */
-    .controlRow{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      margin-top:22px;
-      padding:0 60px;
+    /* CONTROLS */
+    .controls{
+      margin-top:20px;
     }
 
-    /* KNOBS */
-    .knobWrap{
-      text-align:center;
+    button{
+      width:42px;
+      height:34px;
+      margin:4px;
+      background:#1f1f1f;
+      color:#fff;
+      border:none;
+      cursor:pointer;
+    }
+
+    button:hover{
+      background:#333;
+    }
+
+    .knobs{
+      display:flex;
+      justify-content:space-around;
+      margin-top:15px;
     }
 
     .knob{
-      width:85px;
-      height:85px;
+      width:80px;
+      height:80px;
       border-radius:50%;
       background:#222;
-      box-shadow:inset 0 0 12px #000;
       position:relative;
-      cursor:pointer;
-      margin-bottom:6px;
+      box-shadow:inset 0 0 12px #000;
     }
 
     .indicator{
       width:4px;
-      height:30px;
+      height:28px;
       background:#d4af37;
       position:absolute;
       top:12px;
       left:50%;
       transform:translateX(-50%);
-      transform-origin:bottom center;
-    }
-
-    .label{
-      font-size:12px;
-      letter-spacing:1px;
-      color:#bfa77a;
-    }
-
-    /* BUTTONS (between knobs, symbols only) */
-    .buttons{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:center;
-      margin-top:10px;
-    }
-
-    button{
-      width:44px;
-      height:36px;
-      background:#1f1f1f;
-      color:#fff;
-      border:none;
-      cursor:pointer;
-      font-size:16px;
-      border-radius:3px;
-    }
-
-    button:hover{
-      background:#333;
     }
 
   </style>
@@ -185,7 +156,7 @@
 
   <div class="top">
 
-    <div class="speaker"></div>
+    <div class="speaker" id="spkL"></div>
 
     <div class="screenWrap">
       <div class="screenBead1"></div>
@@ -197,38 +168,27 @@
       </div>
     </div>
 
-    <div class="speaker"></div>
+    <div class="speaker" id="spkR"></div>
 
   </div>
 
-  <div class="controlRow">
+  <div class="controls">
+    <button onclick="prev()">⏮</button>
+    <button onclick="play()">▶</button>
+    <button onclick="pause()">⏸</button>
+    <button onclick="next()">⏭</button>
+    <button onclick="toggleLoop()">🔁</button>
+    <button onclick="shuffleToggle()">🔀</button>
+  </div>
 
-    <!-- LEFT KNOB -->
-    <div class="knobWrap">
-      <div class="knob" onclick="volumeUp()">
-        <div class="indicator"></div>
-      </div>
-      <div class="label">VOL</div>
+  <div class="knobs">
+    <div class="knob" onclick="volumeUp()">
+      <div class="indicator"></div>
     </div>
 
-    <!-- BUTTONS -->
-    <div class="buttons">
-      <button onclick="prev()">⏮</button>
-      <button onclick="play()">▶</button>
-      <button onclick="pause()">⏸</button>
-      <button onclick="next()">⏭</button>
-      <button onclick="toggleLoop()">🔁</button>
-      <button onclick="shuffleToggle()">🔀</button>
+    <div class="knob" onclick="next()">
+      <div class="indicator"></div>
     </div>
-
-    <!-- RIGHT KNOB -->
-    <div class="knobWrap">
-      <div class="knob" onclick="next()">
-        <div class="indicator"></div>
-      </div>
-      <div class="label">TUNE</div>
-    </div>
-
   </div>
 
 </div>
@@ -256,6 +216,8 @@ let loop = false;
 
 const audio = document.getElementById("audioPlayer");
 const scroll = document.getElementById("scrollText");
+const spkL = document.getElementById("spkL");
+const spkR = document.getElementById("spkR");
 
 async function loadSongs(){
   const snap = await getDocs(collection(db,"bands"));
@@ -270,11 +232,23 @@ function loadTrack(i){
   current = i;
   let song = playlist[i];
   audio.src = song.mp3;
-  scroll.innerText = song.name + " - " + (song.location || "");
+
+  scroll.innerText =
+    song.name + " - " + (song.location || "") +
+    " | ▶ Play ⏸ Pause ⏮ ⏭ 🔁 Loop 🔀 Random";
 }
 
-window.play = ()=>audio.play();
-window.pause = ()=>audio.pause();
+window.play = ()=>{
+  audio.play();
+  spkL.classList.add("vibe");
+  spkR.classList.add("vibe");
+};
+
+window.pause = ()=>{
+  audio.pause();
+  spkL.classList.remove("vibe");
+  spkR.classList.remove("vibe");
+};
 
 window.next = function(){
   current = randomMode ? Math.floor(Math.random()*playlist.length)
@@ -289,8 +263,8 @@ window.prev = function(){
   play();
 };
 
-window.toggleLoop = ()=>loop = !loop;
-window.shuffleToggle = ()=>randomMode = !randomMode;
+window.toggleLoop = ()=> loop = !loop;
+window.shuffleToggle = ()=> randomMode = !randomMode;
 
 audio.addEventListener("ended",()=>{
   loop ? play() : next();

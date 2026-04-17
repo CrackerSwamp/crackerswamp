@@ -5,36 +5,47 @@
 
   <style>
     body {
-      background:#1a120b;
+      background:#0b0b0b;
+      font-family:Arial;
       color:#f5e6c8;
-      font-family:Courier New, monospace;
-      margin:0;
       text-align:center;
+      margin:0;
     }
 
     .radio {
-      width:500px;
-      margin:60px auto;
-      background:#3b2a1d;
-      border:8px solid #2a1b12;
-      border-radius:20px;
-      box-shadow:0 0 30px #000;
+      width:700px;
+      margin:40px auto;
       padding:20px;
+      background:linear-gradient(145deg,#3a2a1f,#2a1a10);
+      border:6px solid #1a120b;
+      border-radius:15px;
+      box-shadow:0 0 40px black;
     }
 
+    /* Deco Title */
+    .title {
+      font-size:28px;
+      letter-spacing:4px;
+      margin-bottom:15px;
+      color:#d4af37;
+    }
+
+    /* Screen */
     .screen {
-      background:#111;
-      color:#0f0;
-      padding:15px;
-      font-size:18px;
-      height:50px;
+      background:black;
+      color:#00ff88;
+      padding:10px;
+      margin:10px auto;
+      width:80%;
       overflow:hidden;
       white-space:nowrap;
+      font-family:Courier New;
+      border:2px solid #333;
     }
 
     .scroll {
       display:inline-block;
-      animation: scroll 10s linear infinite;
+      animation: scroll 12s linear infinite;
     }
 
     @keyframes scroll {
@@ -42,19 +53,40 @@
       to { transform: translateX(-100%); }
     }
 
+    /* Speakers */
+    .speakers {
+      display:flex;
+      justify-content:space-between;
+      margin-top:20px;
+    }
+
+    .speaker {
+      width:120px;
+      height:120px;
+      border-radius:50%;
+      background:radial-gradient(#333,#000);
+      box-shadow:inset 0 0 20px black;
+    }
+
+    /* Controls */
     .controls {
       margin-top:20px;
     }
 
     button {
-      margin:5px;
       padding:10px 15px;
-      background:#222;
-      color:#fff;
+      margin:5px;
+      background:#1f1f1f;
+      color:white;
       border:none;
       cursor:pointer;
     }
 
+    button:hover {
+      background:#333;
+    }
+
+    /* Knobs */
     .knobs {
       display:flex;
       justify-content:space-around;
@@ -68,17 +100,17 @@
       background:#222;
       position:relative;
       cursor:pointer;
+      box-shadow:inset 0 0 10px black;
     }
 
     .indicator {
       width:4px;
       height:30px;
-      background:#f5e6c8;
+      background:#d4af37;
       position:absolute;
       top:10px;
       left:50%;
       transform-origin:bottom center;
-      transform:rotate(0deg);
     }
 
   </style>
@@ -87,28 +119,32 @@
 
 <div class="radio">
 
-  <h2>Cracker Swamp Radio</h2>
+  <div class="title">CRACKER SWAMP RADIO</div>
 
   <div class="screen">
     <div id="scrollText" class="scroll">Loading...</div>
   </div>
 
+  <div class="speakers">
+    <div class="speaker"></div>
+    <div class="speaker"></div>
+  </div>
+
   <div class="controls">
     <button onclick="play()">Play</button>
     <button onclick="pause()">Pause</button>
-    <button onclick="next()">Next</button>
     <button onclick="prev()">Prev</button>
+    <button onclick="next()">Next</button>
     <button onclick="toggleLoop()">Loop</button>
     <button onclick="shuffleToggle()">Random</button>
   </div>
 
   <div class="knobs">
     <div class="knob" onclick="volumeUp()">
-      <div class="indicator" id="volInd"></div>
+      <div class="indicator"></div>
     </div>
-
     <div class="knob" onclick="next()">
-      <div class="indicator" id="tunInd"></div>
+      <div class="indicator"></div>
     </div>
   </div>
 
@@ -124,7 +160,7 @@ import { getFirestore, collection, getDocs } from "https://www.gstatic.com/fireb
 const firebaseConfig = {
   apiKey: "AIzaSy...",
   authDomain: "cracker-swamp.firebaseapp.com",
-  projectId: "cracker-swamp",
+  projectId: "cracker-swamp"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -138,77 +174,46 @@ let loop = false;
 const audio = document.getElementById("audioPlayer");
 const scroll = document.getElementById("scrollText");
 
-// LOAD
 async function loadSongs() {
   const snap = await getDocs(collection(db, "bands"));
-
   snap.forEach(doc => {
     let b = doc.data();
     if (b.mp3) playlist.push(b);
   });
-
   loadTrack(0);
 }
 
-// LOAD TRACK
 function loadTrack(i) {
   current = i;
   let song = playlist[i];
-
   audio.src = song.mp3;
-
   scroll.innerText = song.name + " - " + (song.location || "");
 }
 
-// PLAY
-window.play = function() {
-  audio.play();
-};
+window.play = () => audio.play();
+window.pause = () => audio.pause();
 
-// PAUSE
-window.pause = function() {
-  audio.pause();
-};
-
-// NEXT
 window.next = function() {
-  if (randomMode) {
-    current = Math.floor(Math.random()*playlist.length);
-  } else {
-    current = (current+1)%playlist.length;
-  }
+  current = randomMode ? Math.floor(Math.random()*playlist.length)
+                       : (current+1)%playlist.length;
   loadTrack(current);
   play();
 };
 
-// PREV
 window.prev = function() {
   current = (current-1+playlist.length)%playlist.length;
   loadTrack(current);
   play();
 };
 
-// LOOP
-window.toggleLoop = function() {
-  loop = !loop;
-};
+window.toggleLoop = () => loop = !loop;
+window.shuffleToggle = () => randomMode = !randomMode;
 
-// RANDOM
-window.shuffleToggle = function() {
-  randomMode = !randomMode;
-};
-
-// AUTO NEXT
 audio.addEventListener("ended", () => {
-  if (loop) {
-    play();
-  } else {
-    next();
-  }
+  loop ? play() : next();
 });
 
-// VOLUME KNOB
-window.volumeUp = function() {
+window.volumeUp = () => {
   audio.volume = Math.min(1, audio.volume + 0.1);
 };
 

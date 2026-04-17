@@ -6,37 +6,61 @@
   <style>
     body {
       background:#0b0b0b;
+      margin:0;
       font-family:Arial;
       color:#f5e6c8;
       text-align:center;
-      margin:0;
     }
 
     .radio {
-      width:700px;
+      width:900px;
       margin:40px auto;
       padding:20px;
-      background:linear-gradient(145deg,#3a2a1f,#2a1a10);
-      border:6px solid #1a120b;
-      border-radius:15px;
+      background:
+        linear-gradient(135deg,#5a3e2b,#3a2518);
+      border:10px solid #2a1a10;
+      border-radius:12px;
       box-shadow:0 0 40px black;
+      position:relative;
     }
 
-    /* Deco Title */
+    /* decorative bead edge */
+    .radio:before {
+      content:"";
+      position:absolute;
+      top:5px; left:5px; right:5px; bottom:5px;
+      border:2px dotted #8b5a2b;
+      pointer-events:none;
+    }
+
     .title {
-      font-size:28px;
-      letter-spacing:4px;
-      margin-bottom:15px;
+      font-size:26px;
       color:#d4af37;
+      letter-spacing:4px;
+      margin-bottom:10px;
     }
 
-    /* Screen */
+    /* speaker + screen row */
+    .top {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-top:10px;
+    }
+
+    .speaker {
+      width:180px;
+      height:180px;
+      border-radius:50%;
+      background:radial-gradient(#444,#000);
+      box-shadow:inset 0 0 30px black;
+    }
+
     .screen {
+      width:50%;
       background:black;
       color:#00ff88;
       padding:10px;
-      margin:10px auto;
-      width:80%;
       overflow:hidden;
       white-space:nowrap;
       font-family:Courier New;
@@ -45,7 +69,7 @@
 
     .scroll {
       display:inline-block;
-      animation: scroll 12s linear infinite;
+      animation: scroll 10s linear infinite;
     }
 
     @keyframes scroll {
@@ -53,40 +77,7 @@
       to { transform: translateX(-100%); }
     }
 
-    /* Speakers */
-    .speakers {
-      display:flex;
-      justify-content:space-between;
-      margin-top:20px;
-    }
-
-    .speaker {
-      width:120px;
-      height:120px;
-      border-radius:50%;
-      background:radial-gradient(#333,#000);
-      box-shadow:inset 0 0 20px black;
-    }
-
-    /* Controls */
-    .controls {
-      margin-top:20px;
-    }
-
-    button {
-      padding:10px 15px;
-      margin:5px;
-      background:#1f1f1f;
-      color:white;
-      border:none;
-      cursor:pointer;
-    }
-
-    button:hover {
-      background:#333;
-    }
-
-    /* Knobs */
+    /* knobs */
     .knobs {
       display:flex;
       justify-content:space-around;
@@ -113,6 +104,24 @@
       transform-origin:bottom center;
     }
 
+    /* buttons under knobs */
+    .controls {
+      margin-top:15px;
+    }
+
+    button {
+      padding:10px 14px;
+      margin:5px;
+      background:#1f1f1f;
+      color:white;
+      border:none;
+      cursor:pointer;
+    }
+
+    button:hover {
+      background:#333;
+    }
+
   </style>
 </head>
 <body>
@@ -121,22 +130,14 @@
 
   <div class="title">CRACKER SWAMP RADIO</div>
 
-  <div class="screen">
-    <div id="scrollText" class="scroll">Loading...</div>
-  </div>
-
-  <div class="speakers">
+  <div class="top">
     <div class="speaker"></div>
-    <div class="speaker"></div>
-  </div>
 
-  <div class="controls">
-    <button onclick="play()">Play</button>
-    <button onclick="pause()">Pause</button>
-    <button onclick="prev()">Prev</button>
-    <button onclick="next()">Next</button>
-    <button onclick="toggleLoop()">Loop</button>
-    <button onclick="shuffleToggle()">Random</button>
+    <div class="screen">
+      <div id="scrollText" class="scroll">Loading...</div>
+    </div>
+
+    <div class="speaker"></div>
   </div>
 
   <div class="knobs">
@@ -146,6 +147,15 @@
     <div class="knob" onclick="next()">
       <div class="indicator"></div>
     </div>
+  </div>
+
+  <div class="controls">
+    <button onclick="play()">Play</button>
+    <button onclick="pause()">Pause</button>
+    <button onclick="prev()">Prev</button>
+    <button onclick="next()">Next</button>
+    <button onclick="toggleLoop()">Loop</button>
+    <button onclick="shuffleToggle()">Random</button>
   </div>
 
 </div>

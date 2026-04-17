@@ -37,7 +37,11 @@
     #nowPlaying {
       margin-top:20px;
       font-size:20px;
-      color:#ccc;
+    }
+
+    .sub {
+      color:#777;
+      font-size:14px;
     }
   </style>
 </head>
@@ -86,7 +90,15 @@ let current = 0;
 const audio = document.getElementById("audioPlayer");
 const now = document.getElementById("nowPlaying");
 
-// LOAD MP3s
+// 🔥 SHUFFLE
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+// LOAD SONGS
 async function loadSongs() {
 
   const snapshot = await getDocs(collection(db, "bands"));
@@ -102,9 +114,10 @@ async function loadSongs() {
   });
 
   if (playlist.length > 0) {
+    shuffle(playlist);
     play(0);
   } else {
-    now.innerText = "No songs yet";
+    now.innerText = "No songs available yet";
   }
 }
 
@@ -115,9 +128,15 @@ function play(index) {
   let song = playlist[index];
 
   audio.src = song.mp3;
-  audio.play();
 
-  now.innerText = song.name + " — " + (song.location || "");
+  audio.play().catch(() => {
+    now.innerText = "Click play to start radio";
+  });
+
+  now.innerHTML = `
+    <strong>${song.name}</strong><br>
+    <span class="sub">${song.location || ""}</span>
+  `;
 }
 
 // NEXT

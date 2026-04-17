@@ -137,32 +137,20 @@ async function loadSongs() {
   }
 }
 
-// LOAD TRACK (DO NOT preload audio)
+// LOAD TRACK (simple + reliable)
 function loadTrack(index) {
   current = index;
   let song = playlist[index];
 
-  // 🚫 do NOT set audio.src here
-  audio.src = "";
+  audio.src = song.mp3;
 
   now.innerHTML = `<strong>${song.name}</strong>`;
   loc.innerText = song.location || "";
   status.innerText = "Ready";
 }
 
-// PLAY (first click always works)
+// PLAY (always works after click)
 window.play = function() {
-
-  if (!playlist.length) return;
-
-  let song = playlist[current];
-
-  // Bind source ONLY on user click
-  if (!audio.src) {
-    audio.src = song.mp3;
-    audio.load();
-  }
-
   audio.play().then(() => {
     status.innerText = "Playing";
   }).catch(() => {
@@ -178,27 +166,15 @@ window.pause = function() {
 
 // NEXT
 window.next = function() {
-  let n = current + 1;
-  if (n >= playlist.length) n = 0;
-
-  let song = playlist[n];
-
-  current = n;
-  audio.src = song.mp3;
-  audio.load();
+  let n = (current + 1) % playlist.length;
+  loadTrack(n);
   play();
 };
 
 // PREV
 window.prev = function() {
-  let p = current - 1;
-  if (p < 0) p = playlist.length - 1;
-
-  let song = playlist[p];
-
-  current = p;
-  audio.src = song.mp3;
-  audio.load();
+  let p = (current - 1 + playlist.length) % playlist.length;
+  loadTrack(p);
   play();
 };
 

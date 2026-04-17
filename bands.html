@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Bands - Cracker Swamp</title>
+
   <style>
     body {
       background:#111;
@@ -27,10 +28,20 @@
       margin:10px;
       padding:10px;
       display:inline-block;
+      cursor:pointer;
     }
 
     .card img {
       width:100%;
+    }
+
+    button {
+      margin:5px;
+      padding:10px 15px;
+      background:#222;
+      color:#fff;
+      border:none;
+      cursor:pointer;
     }
   </style>
 </head>
@@ -43,6 +54,9 @@
 <h1>All Bands</h1>
 
 <div id="bands"></div>
+
+<!-- 🔥 YouTube API -->
+<script src="https://www.youtube.com/iframe_api"></script>
 
 <script type="module">
 
@@ -62,21 +76,21 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 let bandList = [];
-const container = document.getElementById("bands");
+let player;
 
+// extract YouTube ID
 function extractID(url) {
   if (!url || !url.includes("v=")) return "";
   return url.split("v=")[1].split("&")[0];
 }
 
-// 🔥 PLAYER
+// 🔥 PLAYER WITH AUTO-SKIP
 function playVideo(index) {
 
   let band = bandList[index];
   let id = extractID(band.video);
 
   const overlay = document.createElement("div");
-  overlay.id = "overlay";
 
   overlay.style = `
     position:fixed;
@@ -88,48 +102,76 @@ function playVideo(index) {
     justify-content:center;
     align-items:center;
     z-index:999;
+    color:white;
   `;
 
-  overlay.innerHTML = `
-    <h1 style="font-size:42px;">Cracker Swamp</h1>
-    <h2 style="color:#ccc;margin-bottom:15px;">${band.name}</h2>
+  const loading = document.createElement("div");
+  loading.innerText = "Loading...";
+  loading.style.marginBottom = "10px";
 
-    <iframe width="800" height="450"
-      src="https://www.youtube.com/embed/${id}?autoplay=1"
-      frameborder="0" allowfullscreen>
-    </iframe>
+  const playerDiv = document.createElement("div");
+  playerDiv.id = "ytplayer";
+  playerDiv.style.display = "none";
 
-    <div style="margin-top:15px;">
-      <button onclick="nextVideo(${index})">Next</button>
-      <button onclick="replayVideo(${index})">Replay</button>
-      <button onclick="closePlayer()">Close</button>
-    </div>
-  `;
-
+  overlay.appendChild(loading);
+  overlay.appendChild(playerDiv);
   document.body.appendChild(overlay);
+
+  let started = false;
+
+  player = new YT.Player("ytplayer", {
+    height: "450",
+    width: "800",
+    videoId: id,
+    playerVars: { autoplay: 1 },
+    events: {
+
+      onReady: (e) => {
+        e.target.playVideo();
+      },
+
+      onStateChange: (e) => {
+
+        if (e.data === 1 || e.data === 3) {
+          started = true;
+          playerDiv.style.display = "block";
+          loading.style.display = "none";
+        }
+
+        if (e.data === 0) {
+          overlay.remove();
+          nextVideo(index);
+        }
+      },
+
+      onError: () => {
+        overlay.remove();
+        nextVideo(index);
+      }
+    }
+  });
+
+  setTimeout(() => {
+    if (!started) {
+      overlay.remove();
+      nextVideo(index);
+    }
+  }, 4000);
 }
 
-window.closePlayer = function() {
-  document.getElementById("overlay").remove();
-};
-
-window.replayVideo = function(i) {
-  closePlayer();
-  playVideo(i);
-};
-
-window.nextVideo = function(i) {
-  closePlayer();
+// NEXT VIDEO
+function nextVideo(i) {
   let next = i + 1;
   if (next >= bandList.length) next = 0;
   playVideo(next);
-};
+}
 
-// 🔥 LOAD DATA
+// LOAD FROM FIREBASE
 async function loadBands() {
 
   const snapshot = await getDocs(collection(db, "bands"));
 
+  const container = document.getElementById("bands");
   container.innerHTML = "";
   bandList = [];
 
@@ -155,7 +197,6 @@ async function loadBands() {
 
     container.appendChild(div);
   });
-
 }
 
 loadBands();

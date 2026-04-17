@@ -5,100 +5,111 @@
 
   <style>
     body {
-      background:linear-gradient(#0b0b0b,#000);
-      color:white;
-      font-family:Arial;
+      background:#1a120b;
+      color:#f5e6c8;
+      font-family:Courier New, monospace;
       margin:0;
       text-align:center;
     }
 
-    .nav {
-      border-bottom:1px solid #222;
-      padding:10px;
+    .radio {
+      width:500px;
+      margin:60px auto;
+      background:#3b2a1d;
+      border:8px solid #2a1b12;
+      border-radius:20px;
+      box-shadow:0 0 30px #000;
+      padding:20px;
     }
 
-    .nav img {
-      height:150px;
-    }
-
-    .radio-box {
-      margin-top:40px;
-    }
-
-    #art {
-      width:300px;
-      height:300px;
-      object-fit:cover;
-      border-radius:10px;
-      box-shadow:0 0 20px rgba(255,255,255,0.1);
-    }
-
-    #nowPlaying {
-      font-size:26px;
-      margin-top:20px;
-    }
-
-    #location {
-      color:#888;
-      margin-top:5px;
-    }
-
-    .live {
-      margin-top:10px;
-      color:red;
-      font-weight:bold;
-    }
-
-    #startBtn {
-      padding:15px 30px;
+    .screen {
+      background:#111;
+      color:#0f0;
+      padding:15px;
       font-size:18px;
-      background:red;
-      color:white;
-      border:none;
-      margin-top:30px;
-      cursor:pointer;
+      height:50px;
+      overflow:hidden;
+      white-space:nowrap;
+    }
+
+    .scroll {
+      display:inline-block;
+      animation: scroll 10s linear infinite;
+    }
+
+    @keyframes scroll {
+      from { transform: translateX(100%); }
+      to { transform: translateX(-100%); }
     }
 
     .controls {
-      margin-top:25px;
-      display:none;
+      margin-top:20px;
     }
 
-    .controls button {
-      padding:12px 20px;
+    button {
       margin:5px;
-      background:#1f1f1f;
-      color:white;
+      padding:10px 15px;
+      background:#222;
+      color:#fff;
       border:none;
-      font-size:16px;
       cursor:pointer;
     }
 
-    .controls button:hover {
-      background:#333;
+    .knobs {
+      display:flex;
+      justify-content:space-around;
+      margin-top:20px;
     }
+
+    .knob {
+      width:80px;
+      height:80px;
+      border-radius:50%;
+      background:#222;
+      position:relative;
+      cursor:pointer;
+    }
+
+    .indicator {
+      width:4px;
+      height:30px;
+      background:#f5e6c8;
+      position:absolute;
+      top:10px;
+      left:50%;
+      transform-origin:bottom center;
+      transform:rotate(0deg);
+    }
+
   </style>
 </head>
 <body>
 
-<div class="nav">
-  <img src="CRACKERSWAMP.png">
-</div>
+<div class="radio">
 
-<div class="radio-box">
+  <h2>Cracker Swamp Radio</h2>
 
-  <img id="art" src="https://via.placeholder.com/300">
-
-  <div id="nowPlaying">Cracker Swamp Radio</div>
-  <div id="location"></div>
-  <div class="live">● LIVE</div>
-
-  <button id="startBtn">▶ Start Radio</button>
+  <div class="screen">
+    <div id="scrollText" class="scroll">Loading...</div>
+  </div>
 
   <div class="controls">
-    <button onclick="prev()">⏮</button>
-    <button onclick="pause()">⏸</button>
-    <button onclick="next()">⏭</button>
+    <button onclick="play()">Play</button>
+    <button onclick="pause()">Pause</button>
+    <button onclick="next()">Next</button>
+    <button onclick="prev()">Prev</button>
+    <button onclick="toggleLoop()">Loop</button>
+    <button onclick="shuffleToggle()">Random</button>
+  </div>
+
+  <div class="knobs">
+    <div class="knob" onclick="volumeUp()">
+      <div class="indicator" id="volInd"></div>
+    </div>
+
+    <div class="knob" onclick="next()">
+      <div class="indicator" id="tunInd"></div>
+    </div>
   </div>
 
 </div>
@@ -111,12 +122,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/fireba
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBPq01s5eS_GQ_ECkfZsoT5Oo977gPpMS0",
+  apiKey: "AIzaSy...",
   authDomain: "cracker-swamp.firebaseapp.com",
   projectId: "cracker-swamp",
-  storageBucket: "cracker-swamp.firebasestorage.app",
-  messagingSenderId: "217552202123",
-  appId: "1:217552202123:web:ed04bd70294f3713fa678e"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -124,82 +132,85 @@ const db = getFirestore(app);
 
 let playlist = [];
 let current = 0;
+let randomMode = false;
+let loop = false;
 
 const audio = document.getElementById("audioPlayer");
-const now = document.getElementById("nowPlaying");
-const loc = document.getElementById("location");
-const art = document.getElementById("art");
-const startBtn = document.getElementById("startBtn");
-const controls = document.querySelector(".controls");
+const scroll = document.getElementById("scrollText");
 
-// shuffle
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-}
-
-// extract youtube thumbnail
-function getThumb(video) {
-  if (!video || !video.includes("v=")) return "";
-  let id = video.split("v=")[1].split("&")[0];
-  return "https://img.youtube.com/vi/" + id + "/0.jpg";
-}
-
-// load songs
+// LOAD
 async function loadSongs() {
-  const snapshot = await getDocs(collection(db, "bands"));
+  const snap = await getDocs(collection(db, "bands"));
 
-  snapshot.forEach(doc => {
+  snap.forEach(doc => {
     let b = doc.data();
     if (b.mp3) playlist.push(b);
   });
 
-  shuffle(playlist);
+  loadTrack(0);
 }
 
-// load track
+// LOAD TRACK
 function loadTrack(i) {
   current = i;
   let song = playlist[i];
 
   audio.src = song.mp3;
 
-  now.innerHTML = `<strong>${song.name}</strong>`;
-  loc.innerText = song.location || "";
-
-  let thumb = getThumb(song.video);
-  if (thumb) art.src = thumb;
+  scroll.innerText = song.name + " - " + (song.location || "");
 }
 
-// start
-startBtn.onclick = () => {
-  loadTrack(0);
-  audio.play().then(() => {
-    startBtn.style.display = "none";
-    controls.style.display = "block";
-  });
-};
-
-// controls
-window.next = function() {
-  let n = (current + 1) % playlist.length;
-  loadTrack(n);
+// PLAY
+window.play = function() {
   audio.play();
 };
 
-window.prev = function() {
-  let p = (current - 1 + playlist.length) % playlist.length;
-  loadTrack(p);
-  audio.play();
-};
-
+// PAUSE
 window.pause = function() {
   audio.pause();
 };
 
-audio.addEventListener("ended", () => next());
+// NEXT
+window.next = function() {
+  if (randomMode) {
+    current = Math.floor(Math.random()*playlist.length);
+  } else {
+    current = (current+1)%playlist.length;
+  }
+  loadTrack(current);
+  play();
+};
+
+// PREV
+window.prev = function() {
+  current = (current-1+playlist.length)%playlist.length;
+  loadTrack(current);
+  play();
+};
+
+// LOOP
+window.toggleLoop = function() {
+  loop = !loop;
+};
+
+// RANDOM
+window.shuffleToggle = function() {
+  randomMode = !randomMode;
+};
+
+// AUTO NEXT
+audio.addEventListener("ended", () => {
+  if (loop) {
+    play();
+  } else {
+    next();
+  }
+});
+
+// VOLUME KNOB
+window.volumeUp = function() {
+  audio.volume = Math.min(1, audio.volume + 0.1);
+};
 
 loadSongs();
 

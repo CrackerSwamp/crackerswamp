@@ -1,232 +1,233 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Radio</title>
+<title>Radio</title>
 
-  <style>
-    body {
-      background:#0b0b0b;
-      margin:0;
-      font-family:Arial;
-      color:#e9d7b3;
-      display:flex;
-      justify-content:center;
-    }
+<style>
+body{
+  background:#0b0b0b;
+  margin:0;
+  display:flex;
+  justify-content:center;
+  font-family:Arial;
+}
 
-    .radio {
-      width:92%;
-      max-width:480px;
-      padding:10px 8px 14px;
-      background:linear-gradient(135deg,#5b3f2b,#3a2518);
-      border-radius:14px;
-      position:relative;
-      box-shadow:0 0 25px #000;
-    }
+/* RADIO BODY */
+.radio{
+  width:95%;
+  max-width:520px;
+  padding:14px 10px 0;
+  background:linear-gradient(135deg,#5b3f2b,#3a2518);
+  border-radius:20px;
+  position:relative;
+  box-shadow:0 0 30px #000;
+}
 
-    /* TRIPLE BEAD BODY */
-    .radio:before {
-      content:"";
-      position:absolute;
-      inset:0;
-      border:3px solid #d4af37;
-      border-radius:14px;
-    }
+/* TRIPLE BEAD */
+.radio:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border:3px solid #d4af37;
+  border-radius:20px;
+}
+.radio:after{
+  content:"";
+  position:absolute;
+  inset:6px;
+  border:2px solid #8b6a2b;
+  border-radius:18px;
+}
+.innerBead{
+  position:absolute;
+  inset:11px;
+  border:1px solid #2a1a10;
+  border-radius:16px;
+}
 
-    .radio:after {
-      content:"";
-      position:absolute;
-      inset:5px;
-      border:2px solid #8b6a2b;
-      border-radius:12px;
-    }
+/* TOP AREA */
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 10px;
+}
 
-    .innerBead {
-      position:absolute;
-      inset:9px;
-      border:1px solid #2a1a10;
-      border-radius:10px;
-    }
+/* SPEAKERS */
+.speaker{
+  width:34%;
+  aspect-ratio:1;
+  border-radius:50%;
+  background:radial-gradient(#444,#000);
+  position:relative;
+  box-shadow:inset 0 0 25px #000;
+}
 
-    /* TOP ROW — UNCHANGED */
-    .top {
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      gap:10px;
-      margin-top:8px;
-    }
+.speaker:before{
+  content:"";
+  position:absolute;
+  inset:-6px;
+  border:2px solid #d4af37;
+  border-radius:50%;
+}
+.speaker:after{
+  content:"";
+  position:absolute;
+  inset:6px;
+  border:1px solid #8b6a2b;
+  border-radius:50%;
+}
 
-    /* 🔥 SPEAKERS — MAX SIZE WITHOUT TOUCHING */
-    .speaker {
-      flex:1;
-      aspect-ratio:1 / 1;
+/* CENTER COLUMN */
+.center{
+  width:30%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
 
-      /* 120px screen + 2 gaps (~20px total) */
-      max-width:calc((100% - 120px - 20px) / 2);
+/* SCREEN */
+.screenWrap{
+  width:100%;
+  position:relative;
+  padding:4px;
+}
 
-      border-radius:50%;
-      background:radial-gradient(#444,#000);
-      position:relative;
-      box-shadow:inset 0 0 20px #000;
-    }
+.screenWrap:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border:2px solid #d4af37;
+}
+.screenWrap:after{
+  content:"";
+  position:absolute;
+  inset:4px;
+  border:1px solid #8b6a2b;
+}
+.screenInner{
+  position:absolute;
+  inset:8px;
+  border:1px solid #2a1a10;
+}
 
-    /* TRIPLE BEAD SPEAKERS */
-    .speaker:before {
-      content:"";
-      position:absolute;
-      inset:-5px;
-      border:2px solid #d4af37;
-      border-radius:50%;
-    }
+.screen{
+  background:#000;
+  color:#00ff88;
+  font-family:Courier New;
+  font-size:12px;
+  padding:6px;
+  text-align:center;
+}
 
-    .speaker:after {
-      content:"";
-      position:absolute;
-      inset:6px;
-      border:1px solid #8b6a2b;
-      border-radius:50%;
-    }
+/* BUTTONS UNDER SCREEN */
+.buttons{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:6px;
+  margin-top:6px;
+}
 
-    /* SCREEN — UNCHANGED */
-    .screenWrap {
-      width:120px;
-      position:relative;
-      padding:3px;
-    }
+button{
+  width:28px;
+  height:22px;
+  background:#1f1f1f;
+  color:#fff;
+  border:none;
+  font-size:12px;
+}
 
-    .screenWrap:before {
-      content:"";
-      position:absolute;
-      inset:0;
-      border:2px solid #d4af37;
-    }
+/* KNOBS */
+.knobs{
+  display:flex;
+  justify-content:space-between;
+  padding:0 18px;
+  margin-top:6px;
+}
 
-    .screenWrap:after {
-      content:"";
-      position:absolute;
-      inset:4px;
-      border:1px solid #8b6a2b;
-    }
+.knobWrap{
+  text-align:center;
+}
 
-    .screenInner {
-      position:absolute;
-      inset:7px;
-      border:1px solid #2a1a10;
-    }
+.knob{
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  background:#222;
+  position:relative;
+  box-shadow:inset 0 0 10px #000;
+}
 
-    .screen {
-      background:#000;
-      color:#00ff88;
-      font-family:Courier New;
-      font-size:11px;
-      padding:4px;
-      overflow:hidden;
-      white-space:nowrap;
-    }
+.indicator{
+  width:3px;
+  height:18px;
+  background:#d4af37;
+  position:absolute;
+  top:10px;
+  left:50%;
+  transform:translateX(-50%);
+}
 
-    /* CONTROLS — UNCHANGED */
-    .controls {
-      margin-top:6px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:3px;
-    }
+.label{
+  font-size:11px;
+  margin-top:3px;
+  color:#bfa77a;
+}
 
-    .btnRow {
-      display:flex;
-      gap:6px;
-    }
+/* BASE PANEL (bottom shading from sketch) */
+.base{
+  margin-top:10px;
+  height:40px;
+  background:linear-gradient(#2a1a10,#000);
+  border-radius:0 0 18px 18px;
+}
 
-    button {
-      width:34px;
-      height:28px;
-      background:#1f1f1f;
-      color:#fff;
-      border:none;
-    }
-
-    /* KNOBS — UNCHANGED */
-    .knobs {
-      display:flex;
-      justify-content:space-between;
-      margin-top:6px;
-      padding:0 22px;
-    }
-
-    .knobWrap {
-      text-align:center;
-    }
-
-    .knob {
-      width:56px;
-      height:56px;
-      border-radius:50%;
-      background:#222;
-      position:relative;
-      box-shadow:inset 0 0 10px #000;
-    }
-
-    .indicator {
-      width:3px;
-      height:18px;
-      background:#d4af37;
-      position:absolute;
-      top:10px;
-      left:50%;
-      transform:translateX(-50%);
-    }
-
-    .knobLabel {
-      font-size:10px;
-      margin-top:2px;
-      color:#bfa77a;
-      letter-spacing:1px;
-    }
-
-  </style>
+</style>
 </head>
 
 <body>
 
 <div class="radio">
-  <div class="innerBead"></div>
+<div class="innerBead"></div>
 
   <div class="top">
-    <div class="speaker"></div>
-
-    <div class="screenWrap">
-      <div class="screenInner"></div>
-      <div class="screen">Now Playing — Sample Track</div>
-    </div>
 
     <div class="speaker"></div>
-  </div>
 
-  <div class="controls">
-    <div class="btnRow">
-      <button>⏮</button>
-      <button>▶</button>
-      <button>⏸</button>
-      <button>⏭</button>
+    <div class="center">
+      <div class="screenWrap">
+        <div class="screenInner"></div>
+        <div class="screen">PLAY</div>
+      </div>
+
+      <div class="buttons">
+        <button>⏮</button>
+        <button>▶</button>
+        <button>⏸</button>
+        <button>⏭</button>
+        <button>🔁</button>
+        <button>🔀</button>
+      </div>
     </div>
-    <div class="btnRow">
-      <button>🔁</button>
-      <button>🔀</button>
-    </div>
+
+    <div class="speaker"></div>
+
   </div>
 
   <div class="knobs">
     <div class="knobWrap">
       <div class="knob"><div class="indicator"></div></div>
-      <div class="knobLabel">VOL</div>
+      <div class="label">VOL</div>
     </div>
 
     <div class="knobWrap">
       <div class="knob"><div class="indicator"></div></div>
-      <div class="knobLabel">TUNE</div>
+      <div class="label">TUNE</div>
     </div>
   </div>
+
+  <div class="base"></div>
 
 </div>
 

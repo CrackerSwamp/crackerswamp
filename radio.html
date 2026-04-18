@@ -16,7 +16,7 @@
       width:95%;
       max-width:520px;
       margin:20px auto;
-      padding:12px;
+      padding:8px;
       background:linear-gradient(135deg,#5b3f2b,#3a2518);
       border-radius:12px;
       position:relative;
@@ -47,16 +47,18 @@
       border-radius:8px;
     }
 
+    /* TOP ROW — CENTERED */
     .top {
       display:flex;
-      justify-content:space-between;
+      justify-content:center;
       align-items:center;
+      gap:12px;
     }
 
     /* SPEAKERS */
     .speaker {
-      width:120px;
-      height:120px;
+      width:105px;
+      height:105px;
       border-radius:50%;
       background:radial-gradient(#444,#000);
       position:relative;
@@ -72,7 +74,6 @@
       to { transform:scale(1.06); }
     }
 
-    /* TRIPLE BEAD SPEAKERS */
     .speaker:before {
       content:"";
       position:absolute;
@@ -93,7 +94,7 @@
     .screenWrap {
       width:34%;
       position:relative;
-      padding:6px;
+      padding:4px;
     }
 
     .screenWrap:before {
@@ -139,7 +140,7 @@
 
     /* CONTROLS */
     .controls {
-      margin-top:6px;
+      margin-top:4px;
     }
 
     .btnRowTop {
@@ -168,7 +169,7 @@
     .knobs {
       display:flex;
       justify-content:space-around;
-      margin-top:10px;
+      margin-top:4px;
     }
 
     .knobWrap {
@@ -196,7 +197,7 @@
 
     .knobLabel {
       font-size:11px;
-      margin-top:4px;
+      margin-top:2px;
       color:#bfa77a;
       letter-spacing:1px;
     }
@@ -223,7 +224,6 @@
 
   <!-- CONTROLS -->
   <div class="controls">
-
     <div class="btnRowTop">
       <button onclick="btn('Prev'); prev()">⏮</button>
       <button onclick="btn('Play'); play()">▶</button>
@@ -235,12 +235,10 @@
       <button onclick="btn('Loop'); toggleLoop()">🔁</button>
       <button onclick="btn('Random'); shuffleToggle()">🔀</button>
     </div>
-
   </div>
 
   <!-- KNOBS -->
   <div class="knobs">
-
     <div class="knobWrap">
       <div class="knob" onclick="volumeUp()">
         <div class="indicator"></div>
@@ -254,7 +252,6 @@
       </div>
       <div class="knobLabel">TUNE</div>
     </div>
-
   </div>
 
 </div>

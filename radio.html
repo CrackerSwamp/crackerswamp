@@ -1,190 +1,197 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Radio</title>
+  <title>Radio</title>
 
-<style>
-body {
-  background:#0b0b0b;
-  margin:0;
-  display:flex;
-  justify-content:center;
-  font-family:Arial;
-}
+  <style>
+    body {
+      background:#0b0b0b;
+      margin:0;
+      font-family:Arial;
+      color:#e9d7b3;
+      display:flex;
+      justify-content:center;
+    }
 
-/* RADIO BODY */
-.radio {
-  width:92%;
-  max-width:480px;
-  padding:10px 8px 14px;
-  background:linear-gradient(135deg,#5b3f2b,#3a2518);
-  border-radius:14px;
-  position:relative;
-  box-shadow:0 0 25px #000;
-}
+    .radio {
+      width:92%;
+      max-width:480px;
+      padding:10px 8px 14px;
+      background:linear-gradient(135deg,#5b3f2b,#3a2518);
+      border-radius:14px;
+      position:relative;
+      box-shadow:0 0 25px #000;
+    }
 
-/* TRIPLE BEAD BODY */
-.radio:before {
-  content:"";
-  position:absolute;
-  inset:0;
-  border:3px solid #d4af37;
-  border-radius:14px;
-}
-.radio:after {
-  content:"";
-  position:absolute;
-  inset:5px;
-  border:2px solid #8b6a2b;
-  border-radius:12px;
-}
-.innerBead {
-  position:absolute;
-  inset:9px;
-  border:1px solid #2a1a10;
-  border-radius:10px;
-}
+    /* TRIPLE BEAD BODY */
+    .radio:before {
+      content:"";
+      position:absolute;
+      inset:0;
+      border:3px solid #d4af37;
+      border-radius:14px;
+    }
 
-/* TOP GRID */
-.top {
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:10px; /* 🔥 consistent spacing */
-  margin-top:8px;
-}
+    .radio:after {
+      content:"";
+      position:absolute;
+      inset:5px;
+      border:2px solid #8b6a2b;
+      border-radius:12px;
+    }
 
-/* SPEAKERS */
-.speaker {
-  width:96px;
-  height:96px;
-  border-radius:50%;
-  background:radial-gradient(#444,#000);
-  position:relative;
-  box-shadow:inset 0 0 20px #000;
-}
+    .innerBead {
+      position:absolute;
+      inset:9px;
+      border:1px solid #2a1a10;
+      border-radius:10px;
+    }
 
-/* triple bead speakers */
-.speaker:before {
-  content:"";
-  position:absolute;
-  inset:-5px;
-  border:2px solid #d4af37;
-  border-radius:50%;
-}
-.speaker:after {
-  content:"";
-  position:absolute;
-  inset:6px;
-  border:1px solid #8b6a2b;
-  border-radius:50%;
-}
+    /* TOP ROW — UNCHANGED */
+    .top {
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:10px;
+      margin-top:8px;
+    }
 
-/* SCREEN (center anchor) */
-.screenWrap {
-  width:120px; /* 🔥 fixed center anchor */
-  position:relative;
-  padding:3px;
-}
+    /* 🔥 SPEAKERS — MAX SIZE WITHOUT TOUCHING */
+    .speaker {
+      flex:1;
+      aspect-ratio:1 / 1;
 
-/* triple bead screen */
-.screenWrap:before {
-  content:"";
-  position:absolute;
-  inset:0;
-  border:2px solid #d4af37;
-}
-.screenWrap:after {
-  content:"";
-  position:absolute;
-  inset:4px;
-  border:1px solid #8b6a2b;
-}
-.screenInner {
-  position:absolute;
-  inset:7px;
-  border:1px solid #2a1a10;
-}
+      /* 120px screen + 2 gaps (~20px total) */
+      max-width:calc((100% - 120px - 20px) / 2);
 
-.screen {
-  background:#000;
-  color:#00ff88;
-  font-family:Courier New;
-  font-size:11px;
-  padding:4px;
-  overflow:hidden;
-  white-space:nowrap;
-}
+      border-radius:50%;
+      background:radial-gradient(#444,#000);
+      position:relative;
+      box-shadow:inset 0 0 20px #000;
+    }
 
-/* CONTROLS */
-.controls {
-  margin-top:6px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:3px;
-}
+    /* TRIPLE BEAD SPEAKERS */
+    .speaker:before {
+      content:"";
+      position:absolute;
+      inset:-5px;
+      border:2px solid #d4af37;
+      border-radius:50%;
+    }
 
-.btnRow {
-  display:flex;
-  gap:6px;
-}
+    .speaker:after {
+      content:"";
+      position:absolute;
+      inset:6px;
+      border:1px solid #8b6a2b;
+      border-radius:50%;
+    }
 
-button {
-  width:34px;
-  height:28px;
-  background:#1f1f1f;
-  color:#fff;
-  border:none;
-}
+    /* SCREEN — UNCHANGED */
+    .screenWrap {
+      width:120px;
+      position:relative;
+      padding:3px;
+    }
 
-/* KNOBS ROW — aligned with speakers */
-.knobs {
-  display:flex;
-  justify-content:space-between;
-  margin-top:6px;
-  padding:0 22px; /* 🔥 aligns with speakers */
-}
+    .screenWrap:before {
+      content:"";
+      position:absolute;
+      inset:0;
+      border:2px solid #d4af37;
+    }
 
-.knobWrap {
-  text-align:center;
-}
+    .screenWrap:after {
+      content:"";
+      position:absolute;
+      inset:4px;
+      border:1px solid #8b6a2b;
+    }
 
-.knob {
-  width:56px;
-  height:56px;
-  border-radius:50%;
-  background:#222;
-  position:relative;
-  box-shadow:inset 0 0 10px #000;
-}
+    .screenInner {
+      position:absolute;
+      inset:7px;
+      border:1px solid #2a1a10;
+    }
 
-.indicator {
-  width:3px;
-  height:18px;
-  background:#d4af37;
-  position:absolute;
-  top:10px;
-  left:50%;
-  transform:translateX(-50%);
-}
+    .screen {
+      background:#000;
+      color:#00ff88;
+      font-family:Courier New;
+      font-size:11px;
+      padding:4px;
+      overflow:hidden;
+      white-space:nowrap;
+    }
 
-.knobLabel {
-  font-size:10px;
-  margin-top:2px;
-  color:#bfa77a;
-  letter-spacing:1px;
-}
+    /* CONTROLS — UNCHANGED */
+    .controls {
+      margin-top:6px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:3px;
+    }
 
-</style>
+    .btnRow {
+      display:flex;
+      gap:6px;
+    }
+
+    button {
+      width:34px;
+      height:28px;
+      background:#1f1f1f;
+      color:#fff;
+      border:none;
+    }
+
+    /* KNOBS — UNCHANGED */
+    .knobs {
+      display:flex;
+      justify-content:space-between;
+      margin-top:6px;
+      padding:0 22px;
+    }
+
+    .knobWrap {
+      text-align:center;
+    }
+
+    .knob {
+      width:56px;
+      height:56px;
+      border-radius:50%;
+      background:#222;
+      position:relative;
+      box-shadow:inset 0 0 10px #000;
+    }
+
+    .indicator {
+      width:3px;
+      height:18px;
+      background:#d4af37;
+      position:absolute;
+      top:10px;
+      left:50%;
+      transform:translateX(-50%);
+    }
+
+    .knobLabel {
+      font-size:10px;
+      margin-top:2px;
+      color:#bfa77a;
+      letter-spacing:1px;
+    }
+
+  </style>
 </head>
 
 <body>
 
 <div class="radio">
-<div class="innerBead"></div>
+  <div class="innerBead"></div>
 
-  <!-- TOP -->
   <div class="top">
     <div class="speaker"></div>
 
@@ -196,7 +203,6 @@ button {
     <div class="speaker"></div>
   </div>
 
-  <!-- CONTROLS -->
   <div class="controls">
     <div class="btnRow">
       <button>⏮</button>
@@ -210,7 +216,6 @@ button {
     </div>
   </div>
 
-  <!-- KNOBS -->
   <div class="knobs">
     <div class="knobWrap">
       <div class="knob"><div class="indicator"></div></div>

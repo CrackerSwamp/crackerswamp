@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Radio</title>
+  <title>Radio Design</title>
 
   <style>
     body {
@@ -23,7 +23,7 @@
       box-shadow:0 0 30px #000;
     }
 
-    /* TRIPLE BEAD BODY */
+    /* BODY BEADING */
     .radio:before {
       content:"";
       position:absolute;
@@ -47,12 +47,12 @@
       border-radius:8px;
     }
 
-    /* TOP ROW — CENTERED */
     .top {
       display:flex;
       justify-content:center;
-      align-items:center;
+      align-items:flex-start;
       gap:12px;
+      margin-top:10px;
     }
 
     /* SPEAKERS */
@@ -63,17 +63,10 @@
       background:radial-gradient(#444,#000);
       position:relative;
       box-shadow:inset 0 0 25px #000;
+      margin-top:10px; /* 🔥 10% drop */
     }
 
-    .speaker.vibe {
-      animation:pulse 0.2s infinite alternate;
-    }
-
-    @keyframes pulse {
-      from { transform:scale(1); }
-      to { transform:scale(1.06); }
-    }
-
+    /* SPEAKER BEADING */
     .speaker:before {
       content:"";
       position:absolute;
@@ -124,32 +117,16 @@
       font-family:Courier New;
       font-size:12px;
       padding:4px;
-      overflow:hidden;
       white-space:nowrap;
+      overflow:hidden;
     }
 
-    .scroll {
-      display:inline-block;
-      animation:scroll 10s linear infinite;
-    }
-
-    @keyframes scroll {
-      from { transform:translateX(100%); }
-      to { transform:translateX(-100%); }
-    }
-
-    /* CONTROLS */
+    /* BUTTONS (visual only) */
     .controls {
-      margin-top:4px;
+      margin-top:6px;
     }
 
-    .btnRowTop {
-      display:flex;
-      justify-content:center;
-      gap:6px;
-      margin-bottom:2px;
-    }
-
+    .btnRowTop,
     .btnRowBottom {
       display:flex;
       justify-content:center;
@@ -167,9 +144,11 @@
 
     /* KNOBS */
     .knobs {
+      position:relative;
+      margin-top:10px;
+      padding-bottom:0.3in; /* 🔥 lifts knobs up */
       display:flex;
       justify-content:space-around;
-      margin-top:4px;
     }
 
     .knobWrap {
@@ -210,147 +189,43 @@
 <div class="innerBead"></div>
 
   <div class="top">
-    <div class="speaker" id="spkL"></div>
+    <div class="speaker"></div>
 
     <div class="screenWrap">
       <div class="screenInner"></div>
-      <div class="screen">
-        <div id="scrollText" class="scroll">Loading...</div>
-      </div>
+      <div class="screen">Now Playing — Sample Track</div>
     </div>
 
-    <div class="speaker" id="spkR"></div>
+    <div class="speaker"></div>
   </div>
 
-  <!-- CONTROLS -->
   <div class="controls">
     <div class="btnRowTop">
-      <button onclick="btn('Prev'); prev()">⏮</button>
-      <button onclick="btn('Play'); play()">▶</button>
-      <button onclick="btn('Pause'); pause()">⏸</button>
-      <button onclick="btn('Next'); next()">⏭</button>
+      <button>⏮</button>
+      <button>▶</button>
+      <button>⏸</button>
+      <button>⏭</button>
     </div>
 
     <div class="btnRowBottom">
-      <button onclick="btn('Loop'); toggleLoop()">🔁</button>
-      <button onclick="btn('Random'); shuffleToggle()">🔀</button>
+      <button>🔁</button>
+      <button>🔀</button>
     </div>
   </div>
 
-  <!-- KNOBS -->
   <div class="knobs">
     <div class="knobWrap">
-      <div class="knob" onclick="volumeUp()">
-        <div class="indicator"></div>
-      </div>
+      <div class="knob"><div class="indicator"></div></div>
       <div class="knobLabel">VOL</div>
     </div>
 
     <div class="knobWrap">
-      <div class="knob" onclick="tune()">
-        <div class="indicator"></div>
-      </div>
+      <div class="knob"><div class="indicator"></div></div>
       <div class="knobLabel">TUNE</div>
     </div>
   </div>
 
 </div>
-
-<audio id="audioPlayer"></audio>
-
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSy...",
-  authDomain: "cracker-swamp.firebaseapp.com",
-  projectId: "cracker-swamp"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-let playlist=[], current=0, randomMode=false, loop=false;
-
-const audio=document.getElementById("audioPlayer");
-const scroll=document.getElementById("scrollText");
-const spkL=document.getElementById("spkL");
-const spkR=document.getElementById("spkR");
-
-let timeout;
-
-function showTemp(text){
-  clearTimeout(timeout);
-  scroll.innerText=text;
-  timeout=setTimeout(showNow,1500);
-}
-
-function showNow(){
-  let s=playlist[current];
-  scroll.innerText=s.name+" - "+(s.location||"");
-}
-
-async function loadSongs(){
-  const snap=await getDocs(collection(db,"bands"));
-  snap.forEach(doc=>{
-    let b=doc.data();
-    if(b.mp3) playlist.push(b);
-  });
-  loadTrack(0);
-}
-
-function loadTrack(i){
-  current=i;
-  audio.src=playlist[i].mp3;
-  showNow();
-}
-
-window.btn=(t)=>showTemp(t.toUpperCase());
-
-window.play=()=>{
-  audio.play();
-  spkL.classList.add("vibe");
-  spkR.classList.add("vibe");
-};
-
-window.pause=()=>{
-  audio.pause();
-  spkL.classList.remove("vibe");
-  spkR.classList.remove("vibe");
-};
-
-window.next=()=>{
-  current=randomMode?Math.floor(Math.random()*playlist.length):(current+1)%playlist.length;
-  loadTrack(current);
-  play();
-};
-
-window.prev=()=>{
-  current=(current-1+playlist.length)%playlist.length;
-  loadTrack(current);
-  play();
-};
-
-window.toggleLoop=()=>loop=!loop;
-window.shuffleToggle=()=>randomMode=!randomMode;
-
-audio.addEventListener("ended",()=>loop?play():next());
-
-window.volumeUp=()=>{
-  audio.volume=Math.min(1,audio.volume+0.1);
-  showTemp("VOL "+Math.round(audio.volume*100));
-};
-
-window.tune=()=>{
-  next();
-  showTemp("TUNE");
-};
-
-loadSongs();
-
-</script>
 
 </body>
 </html>

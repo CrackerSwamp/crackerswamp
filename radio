@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cracker Swamp Radio</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: #0b0b0b;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    /* 🔥 BANNER */
+    .banner {
+      height: 100vh;
+      background: url('banner.jpg') center/cover no-repeat;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    /* dark overlay */
+    .banner::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+    }
+
+    /* text block */
+    .banner-content {
+      position: relative;
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .title {
+      font-size: 60px;
+      font-weight: bold;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #f5f5f5;
+      text-shadow: 0 0 20px rgba(0,0,0,0.8);
+    }
+
+    .tagline {
+      font-size: 16px;
+      margin-top: 10px;
+      color: #ccc;
+      letter-spacing: 2px;
+    }
+
+    /* 🎧 PLAYER BAR */
+    .player {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #111;
+      border-top: 2px solid #222;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .now-playing {
+      font-size: 14px;
+      color: #aaa;
+    }
+
+    button {
+      background: #222;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #444;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 🔥 HERO BANNER -->
+  <div class="banner">
+    <div class="banner-content">
+      <div class="title">CRACKER SWAMP RADIO</div>
+      <div class="tagline">WHERE THE SIGNAL’S DIRTY AND THE MUSIC HITS BACK</div>
+    </div>
+  </div>
+
+  <!-- 🎧 SIMPLE PLAYER -->
+  <div class="player">
+    <div class="now-playing">Now Playing: Loading...</div>
+    <div>
+      <button onclick="play()">▶</button>
+      <button onclick="pause()">⏸</button>
+    </div>
+  </div>
+
+  <audio id="audio" src=""></audio>
+
+  <script>
+    const audio = document.getElementById("audio");
+
+    function play() {
+      audio.src = "your-stream-or-mp3-link.mp3";
+      audio.play();
+      document.querySelector(".now-playing").innerText = "Now Playing: Cracker Swamp Radio";
+    }
+
+    function pause() {
+      audio.pause();
+    }
+  </script>
+
+</body>
+</html>

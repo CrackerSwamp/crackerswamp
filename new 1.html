@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cracker Swamp Radio</title>
+
+  <style>
+    body{
+      background:#0b0b0b;
+      margin:0;
+      font-family:Arial;
+      color:#e9d7b3;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+
+    /* HEADER */
+    .siteHeader {
+      width:100%;
+      max-width:520px;
+      margin:10px auto 0;
+      padding:10px 0 6px;
+      text-align:center;
+      color:#d4af37;
+      border-bottom:1px solid #2a1a10;
+    }
+
+    .nav {
+      display:flex;
+      justify-content:space-around;
+      font-size:13px;
+    }
+
+    .nav a {
+      color:#bfa77a;
+      text-decoration:none;
+    }
+
+    /* RADIO */
+    .radio{
+      width:95%;
+      max-width:520px;
+      margin-top:10px;
+    }
+
+    .shell{
+      background:linear-gradient(145deg,#5b3f2b,#3a2518);
+      border-radius:40px 40px 20px 20px;
+      padding:18px 12px 0;
+      box-shadow:0 0 30px #000;
+    }
+
+    .face{
+      margin:10px;
+      padding:14px 10px 0;
+      background:#2a1a10;
+      border-radius:30px 30px 16px 16px;
+    }
+
+    .top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+    }
+
+    .speaker{
+      width:32%;
+      aspect-ratio:1;
+      border-radius:50%;
+      background:radial-gradient(#444,#000);
+      box-shadow:inset 0 0 25px #000;
+    }
+
+    .center{
+      width:30%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+
+    .screen{
+      background:#000;
+      color:#00ff88;
+      font-family:Courier New;
+      font-size:12px;
+      padding:8px;
+      text-align:center;
+      width:100%;
+      margin-bottom:8px;
+    }
+
+    .buttons{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:6px;
+    }
+
+    button{
+      width:28px;
+      height:22px;
+      background:#1f1f1f;
+      color:#fff;
+      border:none;
+      cursor:pointer;
+    }
+
+    /* KNOBS */
+    .knobs{
+      display:flex;
+      justify-content:space-between;
+      padding:0 20px;
+      margin-top:12px;
+    }
+
+    .knob{
+      width:56px;
+      height:56px;
+      border-radius:50%;
+      background:#222;
+      position:relative;
+    }
+
+    .indicator{
+      width:3px;
+      height:18px;
+      background:#d4af37;
+      position:absolute;
+      top:10px;
+      left:50%;
+      transform:translateX(-50%);
+    }
+
+    .base{
+      margin-top:12px;
+      height:45px;
+      background:linear-gradient(#2a1a10,#000);
+      border-radius:0 0 18px 18px;
+    }
+
+    /* CONTROLS */
+    .controls{
+      width:90%;
+      max-width:520px;
+      margin-top:20px;
+      background:#111;
+      padding:15px;
+      border-radius:10px;
+    }
+
+    .track{
+      padding:6px;
+      border-bottom:1px solid #333;
+      cursor:pointer;
+    }
+
+    .track:hover{
+      background:#222;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<header class="siteHeader">
+  <div>CRACKER SWAMP RADIO</div>
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="#">Radio</a>
+    <a href="#">Bands</a>
+    <a href="#">Merch</a>
+  </nav>
+</header>
+
+<!-- 🎙️ RADIO -->
+<div class="radio">
+  <div class="shell">
+    <div class="face">
+
+      <div class="top">
+        <div class="speaker"></div>
+
+        <div class="center">
+          <div class="screen" id="screen">
+            --- STANDBY ---
+          </div>
+
+          <div class="buttons">
+            <button onclick="prev()">⏮</button>
+            <button onclick="play()">▶</button>
+            <button onclick="pause()">⏸</button>
+            <button onclick="next()">⏭</button>
+            <button onclick="toggleLoop()">🔁</button>
+            <button onclick="random()">🔀</button>
+          </div>
+        </div>
+
+        <div class="speaker"></div>
+      </div>
+
+      <div class="knobs">
+        <div class="knob" onclick="volumeUp()">
+          <div class="indicator"></div>
+        </div>
+
+        <div class="knob" onclick="volumeDown()">
+          <div class="indicator"></div>
+        </div>
+      </div>
+
+      <div class="base"></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ⚙️ PLAYLIST BUILDER -->
+<div class="controls">
+  <h3>Station Builder</h3>
+
+  <button onclick="loadGenre('rock')">Rock</button>
+  <button onclick="loadGenre('blues')">Blues</button>
+
+  <div id="list"></div>
+</div>
+
+<audio id="audio"></audio>
+
+<script>
+const allTracks = [
+  { name: "Swamp Riders - Mud Run", file: "music/song1.mp3", genre:"rock" },
+  { name: "Delta Kings - River Blues", file: "music/song2.mp3", genre:"blues" }
+];
+
+let playlist = [...allTracks];
+let current = 0;
+
+const audio = document.getElementById("audio");
+const screen = document.getElementById("screen");
+const list = document.getElementById("list");
+
+function updateScreen(){
+  screen.innerText = playlist[current].name;
+}
+
+function play(){
+  audio.src = playlist[current].file;
+  audio.play();
+  updateScreen();
+}
+
+function pause(){
+  audio.pause();
+}
+
+function next(){
+  current = (current + 1) % playlist.length;
+  play();
+}
+
+function prev(){
+  current = (current - 1 + playlist.length) % playlist.length;
+  play();
+}
+
+function random(){
+  current = Math.floor(Math.random()*playlist.length);
+  play();
+}
+
+function toggleLoop(){
+  audio.loop = !audio.loop;
+}
+
+function volumeUp(){
+  audio.volume = Math.min(1, audio.volume + 0.1);
+}
+
+function volumeDown(){
+  audio.volume = Math.max(0, audio.volume - 0.1);
+}
+
+audio.onended = next;
+
+/* 🎯 GENRE FILTER */
+function loadGenre(g){
+  playlist = allTracks.filter(t => t.genre === g);
+  render();
+}
+
+function render(){
+  list.innerHTML = "";
+  playlist.forEach((t,i)=>{
+    const div = document.createElement("div");
+    div.className="track";
+    div.innerText = t.name;
+    div.onclick = ()=>{
+      current = i;
+      play();
+    };
+    list.appendChild(div);
+  });
+}
+
+render();
+</script>
+
+</body>
+</html>

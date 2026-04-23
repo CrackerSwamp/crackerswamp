@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cracker Swamp Radio</title>
+
+  <style>
+    body {
+      background:#0b0b0b;
+      color:white;
+      font-family:Arial;
+      margin:0;
+      text-align:center;
+    }
+
+    /* NAV */
+    .nav {
+      border-bottom:1px solid #222;
+      padding:10px;
+    }
+
+    .nav a {
+      color:white;
+      margin:0 10px;
+      text-decoration:none;
+    }
+
+    /* 🎙️ RADIO DISPLAY */
+    .radio-box {
+      margin:30px auto;
+      width:90%;
+      max-width:600px;
+      background:#1a1a1a;
+      border-radius:10px;
+      padding:20px;
+      box-shadow:0 0 20px rgba(0,0,0,0.7);
+    }
+
+    .radio-screen {
+      background:black;
+      color:#00ff88;
+      font-family:monospace;
+      padding:15px;
+      border-radius:5px;
+      margin-bottom:15px;
+      font-size:14px;
+    }
+
+    audio {
+      width:100%;
+    }
+
+    /* 🔽 ADVANCED CONTROLS */
+    .controls {
+      margin:30px auto;
+      width:90%;
+      max-width:800px;
+      background:#111;
+      padding:20px;
+      border-radius:10px;
+    }
+
+    .hidden {
+      display:none;
+    }
+
+    button {
+      margin:5px;
+      padding:8px 12px;
+      background:#222;
+      color:white;
+      border:none;
+      cursor:pointer;
+    }
+
+    button:hover {
+      background:#444;
+    }
+
+    /* 🎵 PLAYLIST */
+    .playlist {
+      margin-top:20px;
+      text-align:left;
+    }
+
+    .track {
+      padding:8px;
+      border-bottom:1px solid #333;
+      cursor:pointer;
+    }
+
+    .track:hover {
+      background:#222;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <a href="index.html">Home</a>
+  <a href="radio.html">Radio</a>
+  <a href="bands.html">Bands</a>
+  <a href="store.html">Store</a>
+</div>
+
+<!-- 🎙️ RADIO (TOP EXPERIENCE) -->
+<div class="radio-box">
+
+  <div class="radio-screen" id="screen">
+    CRACKER SWAMP RADIO<br>
+    --- STANDBY ---
+  </div>
+
+  <audio id="audio" controls></audio>
+
+  <div>
+    <button onclick="playRandom()">Shuffle</button>
+    <button onclick="next()">Next</button>
+  </div>
+
+</div>
+
+<!-- ⚙️ ADVANCED CONTROLS -->
+<div class="controls">
+
+  <button onclick="toggleControls()">Toggle Builder</button>
+
+  <div id="builder">
+
+    <h3>Build Your Station</h3>
+
+    <!-- GENRE -->
+    <p>Select Genre:</p>
+    <button onclick="filterGenre('rock')">Rock</button>
+    <button onclick="filterGenre('blues')">Blues</button>
+    <button onclick="filterGenre('psychedelic')">Psychedelic</button>
+
+    <!-- TRACK LIST -->
+    <div class="playlist" id="trackList"></div>
+
+  </div>
+
+</div>
+
+<script>
+const allTracks = [
+  { name: "Swamp Riders - Mud Run", file: "music/song1.mp3", genre: "rock" },
+  { name: "Delta Kings - River Blues", file: "music/song2.mp3", genre: "blues" },
+  { name: "Night Moss - Trippin Roots", file: "music/song3.mp3", genre: "psychedelic" }
+];
+
+let playlist = [...allTracks];
+let current = 0;
+
+const audio = document.getElementById("audio");
+const screen = document.getElementById("screen");
+const trackList = document.getElementById("trackList");
+
+function updateScreen(track) {
+  screen.innerHTML =
+    "NOW PLAYING<br>" +
+    track.name + "<br>" +
+    "Cracker Swamp Radio";
+}
+
+function playTrack(i) {
+  current = i;
+  audio.src = playlist[i].file;
+  audio.play();
+  updateScreen(playlist[i]);
+}
+
+function next() {
+  current++;
+  if (current >= playlist.length) current = 0;
+  playTrack(current);
+}
+
+function playRandom() {
+  const r = Math.floor(Math.random() * playlist.length);
+  playTrack(r);
+}
+
+audio.onended = next;
+
+/* 🎯 FILTER */
+function filterGenre(g) {
+  playlist = allTracks.filter(t => t.genre === g);
+  renderList();
+}
+
+/* 🧱 RENDER PLAYLIST */
+function renderList() {
+  trackList.innerHTML = "";
+
+  playlist.forEach((track, i) => {
+    const div = document.createElement("div");
+    div.className = "track";
+    div.innerText = track.name;
+    div.onclick = () => playTrack(i);
+    trackList.appendChild(div);
+  });
+}
+
+/* 🔽 TOGGLE */
+function toggleControls() {
+  const b = document.getElementById("builder");
+  b.classList.toggle("hidden");
+}
+
+/* INIT */
+renderList();
+</script>
+
+</body>
+</html>

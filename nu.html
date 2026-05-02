@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cracker Swamp</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: sans-serif;
+    overflow: hidden;
+    background: #0b0f0b;
+    color: #fff;
+  }
+
+  .container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+  }
+
+  .container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .panel {
+    flex: 0 0 100vw;
+    height: 100vh;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    position: relative;
+  }
+
+  /* Swampy vibe backgrounds */
+  .radio {
+    background: linear-gradient(#0a120a, #1f2f1f);
+  }
+
+  .video {
+    background: linear-gradient(#111, #2a1f1a);
+  }
+
+  .comedy {
+    background: linear-gradient(#1a1a2a, #2a2a3a);
+  }
+
+  .news {
+    background: linear-gradient(#222, #3a2a2a);
+  }
+
+  h1 {
+    margin-bottom: 10px;
+  }
+
+  .content {
+    font-size: 1rem;
+    opacity: 0.7;
+  }
+
+  /* Nav dots */
+  .nav {
+    position: fixed;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #555;
+  }
+
+  .dot.active {
+    background: #fff;
+  }
+
+  /* Arrows for desktop */
+  .arrow {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    background: rgba(0,0,0,0.4);
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10;
+    user-select: none;
+  }
+
+  .left { left: 10px; }
+  .right { right: 10px; }
+
+</style>
+</head>
+
+<body>
+
+<div class="container" id="container">
+
+  <div class="panel radio">
+    <h1>📻 The Station</h1>
+    <div class="content">Live swamp radio</div>
+  </div>
+
+  <div class="panel video">
+    <h1>🎥 Back Room TV</h1>
+    <div class="content">Videos & visuals</div>
+  </div>
+
+  <div class="panel comedy">
+    <h1>😂 Joke Counter</h1>
+    <div class="content">Comedy & chaos</div>
+  </div>
+
+  <div class="panel news">
+    <h1>📰 Bulletin Board</h1>
+    <div class="content">News & updates</div>
+  </div>
+
+</div>
+
+<!-- arrows -->
+<div class="arrow left" onclick="scrollLeft()">◀</div>
+<div class="arrow right" onclick="scrollRight()">▶</div>
+
+<!-- nav dots -->
+<div class="nav">
+  <div class="dot active"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+</div>
+
+<script>
+  const container = document.getElementById("container");
+  const dots = document.querySelectorAll(".dot");
+
+  function scrollRight() {
+    container.scrollBy(window.innerWidth, 0);
+  }
+
+  function scrollLeft() {
+    container.scrollBy(-window.innerWidth, 0);
+  }
+
+  // keyboard support
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") scrollRight();
+    if (e.key === "ArrowLeft") scrollLeft();
+  });
+
+  // update dots
+  container.addEventListener("scroll", () => {
+    const index = Math.round(container.scrollLeft / window.innerWidth);
+    dots.forEach(dot => dot.classList.remove("active"));
+    if (dots[index]) dots[index].classList.add("active");
+  });
+</script>
+
+</body>
+</html>

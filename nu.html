@@ -8,7 +8,7 @@
 <style>
   body {
     margin: 0;
-    font-family: sans-serif;
+    font-family: system-ui, sans-serif;
     overflow: hidden;
     background: #0b0f0b;
     color: #fff;
@@ -32,40 +32,30 @@
     height: 100vh;
     scroll-snap-align: start;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+  }
+
+  .radio { background: linear-gradient(#0a120a, #1f2f1f); }
+  .video { background: linear-gradient(#111, #2a1f1a); }
+  .comedy { background: linear-gradient(#1a1a2a, #2a2a3a); }
+  .news { background: linear-gradient(#222, #3a2a2a); }
+
+  .arrow {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
     font-size: 2rem;
-    position: relative;
+    background: rgba(0,0,0,0.4);
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10;
   }
 
-  /* Swampy vibe backgrounds */
-  .radio {
-    background: linear-gradient(#0a120a, #1f2f1f);
-  }
+  .left { left: 10px; }
+  .right { right: 10px; }
 
-  .video {
-    background: linear-gradient(#111, #2a1f1a);
-  }
-
-  .comedy {
-    background: linear-gradient(#1a1a2a, #2a2a3a);
-  }
-
-  .news {
-    background: linear-gradient(#222, #3a2a2a);
-  }
-
-  h1 {
-    margin-bottom: 10px;
-  }
-
-  .content {
-    font-size: 1rem;
-    opacity: 0.7;
-  }
-
-  /* Nav dots */
   .nav {
     position: fixed;
     bottom: 15px;
@@ -85,23 +75,6 @@
   .dot.active {
     background: #fff;
   }
-
-  /* Arrows for desktop */
-  .arrow {
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 2rem;
-    background: rgba(0,0,0,0.4);
-    padding: 10px;
-    cursor: pointer;
-    z-index: 10;
-    user-select: none;
-  }
-
-  .left { left: 10px; }
-  .right { right: 10px; }
-
 </style>
 </head>
 
@@ -111,31 +84,25 @@
 
   <div class="panel radio">
     <h1>📻 The Station</h1>
-    <div class="content">Live swamp radio</div>
   </div>
 
   <div class="panel video">
     <h1>🎥 Back Room TV</h1>
-    <div class="content">Videos & visuals</div>
   </div>
 
   <div class="panel comedy">
     <h1>😂 Joke Counter</h1>
-    <div class="content">Comedy & chaos</div>
   </div>
 
   <div class="panel news">
     <h1>📰 Bulletin Board</h1>
-    <div class="content">News & updates</div>
   </div>
 
 </div>
 
-<!-- arrows -->
 <div class="arrow left" onclick="scrollLeft()">◀</div>
 <div class="arrow right" onclick="scrollRight()">▶</div>
 
-<!-- nav dots -->
 <div class="nav">
   <div class="dot active"></div>
   <div class="dot"></div>
@@ -147,12 +114,19 @@
   const container = document.getElementById("container");
   const dots = document.querySelectorAll(".dot");
 
+  function getIndex() {
+    return Math.round(container.scrollLeft / window.innerWidth);
+  }
+
   function scrollRight() {
-    container.scrollBy(window.innerWidth, 0);
+    const max = container.children.length - 1;
+    const next = Math.min(getIndex() + 1, max);
+    container.scrollTo({ left: next * window.innerWidth, behavior: "smooth" });
   }
 
   function scrollLeft() {
-    container.scrollBy(-window.innerWidth, 0);
+    const prev = Math.max(getIndex() - 1, 0);
+    container.scrollTo({ left: prev * window.innerWidth, behavior: "smooth" });
   }
 
   // keyboard support
@@ -163,7 +137,7 @@
 
   // update dots
   container.addEventListener("scroll", () => {
-    const index = Math.round(container.scrollLeft / window.innerWidth);
+    const index = getIndex();
     dots.forEach(dot => dot.classList.remove("active"));
     if (dots[index]) dots[index].classList.add("active");
   });

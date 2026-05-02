@@ -23,9 +23,7 @@
     scroll-behavior: smooth;
   }
 
-  .container::-webkit-scrollbar {
-    display: none;
-  }
+  .container::-webkit-scrollbar { display: none; }
 
   .panel {
     flex: 0 0 100vw;
@@ -34,7 +32,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
+    font-size: 2rem;
   }
 
   .radio { background: linear-gradient(#0a120a, #1f2f1f); }
@@ -51,6 +49,7 @@
     padding: 10px;
     cursor: pointer;
     z-index: 10;
+    user-select: none;
   }
 
   .left { left: 10px; }
@@ -72,32 +71,17 @@
     background: #555;
   }
 
-  .dot.active {
-    background: #fff;
-  }
+  .dot.active { background: #fff; }
 </style>
 </head>
 
 <body>
 
 <div class="container" id="container">
-
-  <div class="panel radio">
-    <h1>📻 The Station</h1>
-  </div>
-
-  <div class="panel video">
-    <h1>🎥 Back Room TV</h1>
-  </div>
-
-  <div class="panel comedy">
-    <h1>😂 Joke Counter</h1>
-  </div>
-
-  <div class="panel news">
-    <h1>📰 Bulletin Board</h1>
-  </div>
-
+  <div class="panel radio">📻 The Station</div>
+  <div class="panel video">🎥 Back Room TV</div>
+  <div class="panel comedy">😂 Joke Counter</div>
+  <div class="panel news">📰 Bulletin Board</div>
 </div>
 
 <div class="arrow left" onclick="scrollLeft()">◀</div>
@@ -112,34 +96,56 @@
 
 <script>
   const container = document.getElementById("container");
+  const panels = document.querySelectorAll(".panel");
   const dots = document.querySelectorAll(".dot");
 
-  function getIndex() {
-    return Math.round(container.scrollLeft / window.innerWidth);
+  let currentIndex = 0;
+
+  function goTo(index) {
+    currentIndex = Math.max(0, Math.min(index, panels.length - 1));
+
+    panels[currentIndex].scrollIntoView({
+      behavior: "smooth",
+      inline: "start"
+    });
+
+    updateDots();
   }
 
   function scrollRight() {
-    const max = container.children.length - 1;
-    const next = Math.min(getIndex() + 1, max);
-    container.scrollTo({ left: next * window.innerWidth, behavior: "smooth" });
+    goTo(currentIndex + 1);
   }
 
   function scrollLeft() {
-    const prev = Math.max(getIndex() - 1, 0);
-    container.scrollTo({ left: prev * window.innerWidth, behavior: "smooth" });
+    goTo(currentIndex - 1);
   }
 
-  // keyboard support
+  function updateDots() {
+    dots.forEach(dot => dot.classList.remove("active"));
+    if (dots[currentIndex]) dots[currentIndex].classList.add("active");
+  }
+
+  // Sync when user scrolls manually
+  container.addEventListener("scroll", () => {
+    let closest = 0;
+    let closestOffset = Infinity;
+
+    panels.forEach((panel, i) => {
+      const offset = Math.abs(panel.offsetLeft - container.scrollLeft);
+      if (offset < closestOffset) {
+        closestOffset = offset;
+        closest = i;
+      }
+    });
+
+    currentIndex = closest;
+    updateDots();
+  });
+
+  // Keyboard support
   window.addEventListener("keydown", (e) => {
     if (e.key === "ArrowRight") scrollRight();
     if (e.key === "ArrowLeft") scrollLeft();
-  });
-
-  // update dots
-  container.addEventListener("scroll", () => {
-    const index = getIndex();
-    dots.forEach(dot => dot.classList.remove("active"));
-    if (dots[index]) dots[index].classList.add("active");
   });
 </script>
 
